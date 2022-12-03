@@ -12,6 +12,11 @@ public class BehaviourTreeEngine : BehaviourEngine {
     private TreeNode rootNodeBT;
     private List<TreeNode> BTnodes;
 
+    internal void CreateSelectorMode(string v)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion variables
 
     /// <summary>
@@ -30,6 +35,11 @@ public class BehaviourTreeEngine : BehaviourEngine {
         states.Add(entryState.Name, entryState);
 
         Active = true;
+    }
+
+    internal TreeNode CreateLeafNode(string v)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
