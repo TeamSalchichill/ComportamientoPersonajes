@@ -11,6 +11,8 @@ public class CP_Torres : MonoBehaviour
     public float range;
     public GameObject emnemigo;
 
+    public GameObject bala;
+    int vidaEnemigo = 10000;
     void Start()
     {
         FMS_Torres = new StateMachineEngine(false);
@@ -44,6 +46,11 @@ public class CP_Torres : MonoBehaviour
     void T_atacando()
     {
         print("Ataco");
+        while (vidaEnemigo > 0)
+        {
+            Shoot();
+        }
+      
     }
 
     void T_no_atacando()
@@ -57,5 +64,12 @@ public class CP_Torres : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void Shoot()
+    {
+       // vidaEnemigo--;
+       // print(vidaEnemigo);
 
+        GameObject instBullet = Instantiate(bala, transform.position, transform.rotation);
+        instBullet.GetComponent<CP_Bullet_Tower>().Seek(emnemigo.transform);
+    }
 }
