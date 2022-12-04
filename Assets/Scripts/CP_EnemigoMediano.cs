@@ -1,17 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CP_EnemigoMediano : MonoBehaviour
 {
     StateMachineEngine FMS_EnMediano;
 
+    GameManager gameManager;
+
+    [Header("Components")]
+    public NavMeshAgent nav;
+
+    [Header("Stats")]
     public int health;
-    public int rango;
-    public GameObject torreta;
-    public bool pequeñosLlaman;
+    public int range;
+
+    [Header("Checks variables")]
+    public bool towerInRangeCheck;
+    public GameObject towerInRange;
+
+    public bool enemyInRangeCheck;
+    public GameObject enemyInRange;
+
+    [Header("Debug")]
+    //public GameObject tower;
+    public GameObject enemy;
 
     void Start()
+    {
+        gameManager = GameManager.instance;
+
+        nav = GetComponent<NavMeshAgent>();
+        //nav.destination = gameManager.mainTower.transform.position;
+        nav.SetDestination(Vector3.zero);
+
+        CreateFMS();
+    }
+
+    void Update()
+    {
+        towerInRangeCheck = false;
+        towerInRange = null;
+        foreach (GameObject tower in gameManager.towers)
+        {
+            if (Vector3.Distance(transform.position, tower.transform.position) < range)
+            {
+                towerInRangeCheck = true;
+                towerInRange = tower;
+                break;
+            }
+        }
+        enemyInRangeCheck = false;
+        enemyInRange = null;
+        foreach (GameObject enemy in gameManager.enemies)
+        {
+            if (Vector3.Distance(transform.position, enemy.transform.position) < range)
+            {
+                enemyInRangeCheck = true;
+                enemyInRange = enemy;
+                break;
+            }
+        }
+
+        FMS_EnMediano.Update();
+    }
+
+    void CreateFMS()
     {
         FMS_EnMediano = new StateMachineEngine(false);
 
@@ -22,9 +77,9 @@ public class CP_EnemigoMediano : MonoBehaviour
         State EMs_morir = FMS_EnMediano.CreateState("morir", EM_morir);
 
         //Creación de percepciones
-        Perception EMp_pequeños_llaman = FMS_EnMediano.CreatePerception<ValuePerception>(() => pequeñosLlaman == true);
-        Perception EMp_hay_torreta = FMS_EnMediano.CreatePerception<ValuePerception>(() => Vector3.Distance(transform.position, torreta.transform.position) < rango);
-        Perception EMp_no_hay_torreta = FMS_EnMediano.CreatePerception<ValuePerception>(() => Vector3.Distance(transform.position, torreta.transform.position) > rango);
+        Perception EMp_pequeños_llaman = FMS_EnMediano.CreatePerception<ValuePerception>(() => gameManager.help == true);
+        Perception EMp_hay_torreta = FMS_EnMediano.CreatePerception<ValuePerception>(() => towerInRangeCheck);
+        Perception EMp_no_hay_torreta = FMS_EnMediano.CreatePerception<ValuePerception>(() => !towerInRangeCheck);
         Perception EMp_sin_vida = FMS_EnMediano.CreatePerception<ValuePerception>(() => health <= 0);
 
         //Creación transiciones
@@ -42,25 +97,28 @@ public class CP_EnemigoMediano : MonoBehaviour
         FMS_EnMediano.CreateTransition("muriendo3", EMs_atacar, EMp_sin_vida, EMs_morir);
     }
 
-    void Update()
-    {
-        FMS_EnMediano.Update();
-    }
-
     void EM_avanzar()
     {
         print("avanzo");
-        avanzar();
+        avanzar(Vector3.zero);
     }
 
     void EM_cambiar_camino()
     {
         print("cambio camino");
-        avanzar();
+        avanzar(enemyInRange.transform.position);
     }
     void EM_atacar()
     {
         print("ataco");
+        if (towerInRange)
+        {
+            avanzar(towerInRange.transform.position);
+        }
+        else
+        {
+            avanzar(gameManager.mainTower.transform.position);
+        }
     }
     void EM_morir()
     {
@@ -69,10 +127,11 @@ public class CP_EnemigoMediano : MonoBehaviour
     }
 
     //Método que hace que controla avance del enemigo
-    void avanzar()
+    void avanzar(Vector3 targetPos)
     {
         print("voy camninando por la vida, sin pausa pero sin prisa");
+        //nav.destination = targetPos;
+        nav.SetDestination(targetPos);
     }
-
 }
 
