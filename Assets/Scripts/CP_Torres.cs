@@ -13,10 +13,12 @@ public class CP_Torres : MonoBehaviour
 
     [Header("Stats")]
     public int health;
+    public int healthMax;
     public int range;
     public int damage;
     public float fireRate;
     float fireRateTimer;
+    public int kills;
 
     [Header("Checks variables")]
     public bool enemyInRangeCheck;
@@ -26,6 +28,8 @@ public class CP_Torres : MonoBehaviour
     {
         gameManager = GameManager.instance;
 
+        healthMax = health;
+
         fireRateTimer = fireRate;
 
         CreateFMS();
@@ -34,6 +38,8 @@ public class CP_Torres : MonoBehaviour
     void Update()
     {
         fireRateTimer += Time.deltaTime;
+
+        health = Mathf.Min(health, healthMax);
 
         enemyInRangeCheck = false;
         enemyInRange = null;
@@ -87,7 +93,11 @@ public class CP_Torres : MonoBehaviour
         if (fireRateTimer >= fireRate)
         {
             print("Ataco");
-            Shoot();
+            fireRateTimer = 0;
+
+            GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
+            instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
+            instBullet.GetComponent<CP_Bullet_Tower>().myTower = this;
         }
     }
 
@@ -100,13 +110,5 @@ public class CP_Torres : MonoBehaviour
     {
         print("Hasta luego");
         Destroy(gameObject);
-    }
-
-    void Shoot()
-    {
-        fireRateTimer = 0;
-
-        GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
-        instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
     }
 }

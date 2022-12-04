@@ -153,10 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
-  health: 5000
+  health: 2000
   damage: 20
-  rangeDetect: 10
-  rangeAttack: 4
+  rangeDetect: 6
+  rangeAttack: 6
   hitRate: 0.5
   towerInRangeCheck: 0
   towerInRange: {fileID: 0}

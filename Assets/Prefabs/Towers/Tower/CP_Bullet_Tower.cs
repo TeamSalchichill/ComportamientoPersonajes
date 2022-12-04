@@ -9,6 +9,8 @@ public class CP_Bullet_Tower : MonoBehaviour
     public int speed = 70;
     public int damage = 100;
 
+    public CP_Torres myTower;
+
     public void Seek(Transform _target)
     {
         target = _target;
@@ -31,6 +33,14 @@ public class CP_Bullet_Tower : MonoBehaviour
         {
             if (target.gameObject.GetComponent<CP_EnemigoMediano>())
             {
+                if (target.gameObject.GetComponent<CP_EnemigoMediano>().health <= damage)
+                {
+                    if (myTower)
+                    {
+                        myTower.kills++;
+                    }
+                }
+
                 target.gameObject.GetComponent<CP_EnemigoMediano>().health -= damage;
                 Destroy(gameObject);
             }

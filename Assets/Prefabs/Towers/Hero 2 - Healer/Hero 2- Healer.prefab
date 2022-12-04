@@ -112,6 +112,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2244f252807c72d4799b8792e2b01bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullet: {fileID: 3465808365523367459, guid: e610def9e323adf4e8c67d5ac3c7d7d7, type: 3}
+  health: 1000
+  range: 20
+  damage: 50
+  fireRate: 1
+  curation: 250
+  curationRate: 5
+  fireRateBoost: 0.5
+  fireRateBoostRate: 7
+  bossToParalize: {fileID: 0}
+  enemyInRangeCheck: 0
+  enemyInRange: {fileID: 0}
+  towerInRangeBoostCheck: 0
+  towerInRangeBoost: {fileID: 0}
+  towerInRangeCurationCheck: 0
+  towerInRangeCuration: {fileID: 0}
 --- !u!1 &7536160929447579283
 GameObject:
   m_ObjectHideFlags: 0

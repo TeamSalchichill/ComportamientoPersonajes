@@ -4,18 +4,121 @@ using UnityEngine;
 
 public class CP_Hero2_Healer : MonoBehaviour
 {
-    public int health = 1000;
-    public bool enemigos = false;
-    public bool torreDanada = false;
-    public bool timerAumento = false;
-    public bool timerParalizar = false;
-
     BehaviourTreeEngine BT_Heroe2;
+
+    GameManager gameManager;
+
+    [Header("External GameObjects")]
+    public GameObject bullet;
+
+    [Header("Stats")]
+    public int health;
+    int healthMax;
+    public int range;
+    public int damage;
+    public float fireRate;
+    float fireRateTimer;
+    [Space]
+    public int curation;
+    public float curationRate;
+    float curationRateTimer;
+    List<GameObject> enemiesInRange;
+    [Space]
+    public float fireRateBoost;
+    public float fireRateBoostRate;
+    float fireRateBoostRateTimer;
+    [Space]
+    public GameObject bossToParalize;
+
+    [Header("Checks variables")]
+    public bool enemyInRangeCheck;
+    public GameObject enemyInRange;
+
+    public bool towerInRangeBoostCheck;
+    public GameObject towerInRangeBoost;
+
+    public bool towerInRangeCurationCheck;
+    public GameObject towerInRangeCuration;
 
     void Start()
     {
-        //definimos el arbol
+        gameManager = GameManager.instance;
 
+        healthMax = health;
+
+        fireRateTimer = fireRate;
+        curationRateTimer = curationRate;
+        fireRateBoostRateTimer = fireRateBoostRate;
+
+        CreateBT();
+    }
+    void Update()
+    {
+        fireRateTimer += Time.deltaTime;
+        curationRateTimer += Time.deltaTime;
+        fireRateBoostRateTimer += Time.deltaTime;
+
+        enemyInRangeCheck = false;
+        enemyInRange = null;
+        enemiesInRange = new List<GameObject>();
+        foreach (GameObject enemy in gameManager.enemies)
+        {
+            if (enemy)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < range)
+                {
+                    if (!enemyInRangeCheck)
+                    {
+                        enemyInRangeCheck = true;
+                        enemyInRange = enemy;
+                    }
+
+                    if (enemy.GetComponent<CP_Boss1_Invocador>() || enemy.GetComponent<CP_Boss2_Atacante>())
+                    {
+                        bossToParalize = enemy;
+                    }
+
+                    enemiesInRange.Add(enemy);
+                }
+            }
+        }
+
+        towerInRangeBoostCheck = false;
+        towerInRangeBoost = null;
+        int numMaxKills = 0;
+        towerInRangeCurationCheck = false;
+        towerInRangeCuration = null;
+        int numMaxHealth = 1000000;
+        foreach (GameObject tower in gameManager.towers)
+        {
+            if (Vector3.Distance(transform.position, tower.transform.position) < range)
+            {
+                if (tower.GetComponent<CP_Torres>())
+                {
+                    if (numMaxKills <= tower.GetComponent<CP_Torres>().kills)
+                    {
+                        numMaxKills = tower.GetComponent<CP_Torres>().kills;
+
+                        towerInRangeBoostCheck = true;
+                        towerInRangeBoost = tower;
+                    }
+                    if (numMaxHealth >= tower.GetComponent<CP_Torres>().health && tower.GetComponent<CP_Torres>().health < tower.GetComponent<CP_Torres>().healthMax)
+                    {
+                        numMaxHealth = tower.GetComponent<CP_Torres>().health;
+
+                        towerInRangeCurationCheck = true;
+                        towerInRangeCuration = tower;
+                    }
+                }
+            }
+        }
+
+        BT_Heroe2.Update();
+    }
+
+    void CreateBT()
+    {
+        //definimos el arbol
         BT_Heroe2 = new BehaviourTreeEngine(BehaviourEngine.IsNotASubmachine);
 
         //nodos selectores
@@ -81,37 +184,46 @@ public class CP_Hero2_Healer : MonoBehaviour
 
         //Definir el nodo raiz
         BT_Heroe2.SetRootNode(NodoInicial);
-
-
     }
-    void Update()
-    {
-        BT_Heroe2.Update();
 
-    }
     void circuloAmarillo()
     {
-        // print("soy una bola amarilla, es decir una pregunta ");
+        //print("soy una bola amarilla, es decir una pregunta ");
     }
     void Morir()
     {
         print("estoy muerto");
+        Destroy(gameObject);
     }
     void Aumentar()
     {
         print("aumento velocidad");
+        fireRateBoostRateTimer = 0;
+        towerInRangeBoost.GetComponent<CP_Torres>().fireRate *= fireRateBoost;
     }
     void Paralizar()
     {
         print("paralizo");
+
     }
     void Atacar()
     {
-        print("atacar");
+        print("Recargando");
+
+        print("Ataco");
+        fireRateTimer = 0;
+
+        GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
+        instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
     }
     void Curar()
     {
-        print("curar");
+        if (curationRateTimer >= curationRate)
+        {
+            print("curar");
+            curationRateTimer = 0;
+            towerInRangeCuration.GetComponent<CP_Torres>().health += curation;
+        }
     }
     void Idle()
     {
@@ -135,7 +247,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     ReturnValues ComprobarAumento()
     {
-        if (timerAumento == true)
+        if (fireRateBoostRateTimer >= fireRateBoostRate)
         {
             print("puedo aumentar");
             return ReturnValues.Succeed;
@@ -148,7 +260,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     ReturnValues ComprobarEnemigo()
     {
-        if (enemigos == true)
+        if (enemyInRange && fireRateTimer >= fireRate)
         {
             print("hay enemigos");
             return ReturnValues.Succeed;
@@ -161,7 +273,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     ReturnValues ComprobarGolpe()
     {
-        if (timerParalizar == true)
+        if (health < healthMax && bossToParalize)
         {
             print("me han golpeado");
             return ReturnValues.Succeed;
@@ -179,7 +291,7 @@ public class CP_Hero2_Healer : MonoBehaviour
         //si no hay torre danada
         //return ReturnValues.Failed;
 
-        if (torreDanada == true)
+        if (towerInRangeCuration && enemiesInRange.Count == 0)
         {
             print("hay torre dañada");
             return ReturnValues.Succeed;
@@ -189,7 +301,5 @@ public class CP_Hero2_Healer : MonoBehaviour
             print("No hay torre dañada");
             return ReturnValues.Failed;
         }
-
     }
-
 }
