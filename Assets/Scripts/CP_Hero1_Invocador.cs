@@ -4,87 +4,157 @@ using UnityEngine;
 
 public class CP_Hero1_Invocador : MonoBehaviour
 {
-    StateMachineEngine FSM_Vivo;
-    //StateMachineEngine FSM_Nivel1;
-    
+    StateMachineEngine FSM_Hero1;
 
-    public int health = 1000;                      //vida del heroe
-    public bool hayEnemigos = false;        //comprobamos si hay enemigos dentro del rango del heroe
-    public int vidaEnemigos = 0;            //comprobamos si la vida de los enemigos a rango en menor de 4000
-    public bool muroVivo = false;           //comprobamos si ya hay un muro colocado
+    GameManager gameManager;
 
+    [Header("External GameObjects")]
+    public GameObject bullet;
+    public GameObject wall;
+
+    [Header("Stats")]
+    public int health;
+    public int range;
+    public int damage;
+    public float fireRate;
+    float fireRateTimer;
+    [Space]
+    public int enemiesHealthToinvoke;
+    int enemiesHealth;
+    public bool wallAlive;
+    [Space]
+    public float wallRate;
+    public float wallRateTimer;
+
+    [Header("Checks variables")]
+    public bool enemyInRangeCheck;
+    public GameObject enemyInRange;
 
     void Start()
     {
-        //Crear maquinas de estado
-        FSM_Vivo = new StateMachineEngine(BehaviourEngine.IsNotASubmachine);
-        //FSM_Nivel1 = new StateMachineEngine(BehaviourEngine.IsNotASubmachine);
+        gameManager = GameManager.instance;
 
-        //Creacion de estados
+        fireRateTimer = fireRate;
+        wallRateTimer = wallRate;
 
-        //estados FSM_Vivo
-        State Idle = FSM_Vivo.CreateEntryState("Idle", accionIdle);
-        State Invocar =FSM_Vivo.CreateState("Invocar", accionInvocar);
-        State Atacar =FSM_Vivo.CreateState("Atacar", accionAtacar);
-
-        //estados FSM_Nivel1
-       //State Vivo =  FSM_Nivel1.CreateSubStateMachine("Vivo", FSM_Vivo);
-        //State Muerto = FSM_Nivel1.CreateState("Muerto", accionMorir);
-
-        
-        //Crear percepciones
-        //Percepciones FSM_Nivel1
-        //Perception tengo_vida = FSM_Nivel1.CreatePerception<ValuePerception>(() => health <= 0); //comprobamos si la vida del heroe es menor o igual a cero
-
-        //Percepciones FSM_Vivo
-        Perception enemigos_debiles = FSM_Vivo.CreatePerception<ValuePerception>(() => hayEnemigos == true,() => vidaEnemigos < 4000);
-        Perception no_hay_enemigos = FSM_Vivo.CreatePerception<ValuePerception>(() => hayEnemigos == false);
-        Perception debo_invocar = FSM_Vivo.CreatePerception<ValuePerception>(() => hayEnemigos == true, () => vidaEnemigos > 4000, () => muroVivo == false);
-        Perception ya_invoque_y_hay_enemigos = FSM_Vivo.CreatePerception<ValuePerception>(() => hayEnemigos == true, () => muroVivo == true);
-
-
-
-        //Creacion de transiciones
-        //FSM_Nivel1.CreateTransition("Morir", Vivo, tengo_vida, Muerto);
-
-        FSM_Vivo.CreateTransition("aInvocar", Idle, debo_invocar, Invocar);
-        FSM_Vivo.CreateTransition("aInvocar1", Atacar, debo_invocar, Invocar);
-
-        FSM_Vivo.CreateTransition("aAtacar", Idle, enemigos_debiles, Atacar);
-        FSM_Vivo.CreateTransition("aAtacar1", Invocar, ya_invoque_y_hay_enemigos, Atacar);
-
-        FSM_Vivo.CreateTransition("aIdle", Invocar, no_hay_enemigos, Idle);
-        FSM_Vivo.CreateTransition("aIdle1", Atacar, no_hay_enemigos, Idle);
-
-
-
-
+        CreateFMS();
     }
 
     void Update()
     {
-        //FSM_Nivel1.Update();
-        FSM_Vivo.Update();
+        fireRateTimer += Time.deltaTime;
 
-        //aqui van todas las comprobaciones para cambiar los valores de las variables
-        if(health <= 0)
+        if (!wallAlive)
         {
-            print("muere");
+            wallRateTimer += Time.deltaTime;
         }
+
+        enemyInRangeCheck = false;
+        enemyInRange = null;
+        enemiesHealth = 0;
+        foreach (GameObject enemy in gameManager.enemies)
+        {
+            if (enemy)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < range)
+                {
+                    if (!enemyInRangeCheck)
+                    {
+                        enemyInRangeCheck = true;
+                        enemyInRange = enemy;
+                    }
+
+                    if (enemy.GetComponent<CP_EnemigoMediano>())
+                    {
+                        enemiesHealth += enemy.GetComponent<CP_EnemigoMediano>().health;
+                    }
+                }
+            }
+        }
+
+        // Detectar muerte
+        if (health <= 0)
+        {
+            print("Muere");
+            Destroy(gameObject);
+        }
+
+        FSM_Hero1.Update();
+    }
+
+    void CreateFMS()
+    {
+        //Crear maquinas de estado
+        FSM_Hero1 = new StateMachineEngine(BehaviourEngine.IsNotASubmachine);
+
+        //Creacion de estados
+
+        //estados FSM_Hero1
+        State Idle = FSM_Hero1.CreateEntryState("Idle", accionIdle);
+        State Invocar = FSM_Hero1.CreateState("Invocar", accionInvocar);
+        State Atacar = FSM_Hero1.CreateState("Atacar", accionAtacar);
+
+        //Percepciones FSM_Hero1
+        Perception enemigos_debiles = FSM_Hero1.CreatePerception<ValuePerception>(() => enemyInRangeCheck, () => enemiesHealth < enemiesHealthToinvoke);
+        Perception no_hay_enemigos = FSM_Hero1.CreatePerception<ValuePerception>(() => !enemyInRangeCheck);
+        Perception debo_invocar = FSM_Hero1.CreatePerception<ValuePerception>(() => enemyInRangeCheck, () => enemiesHealth > enemiesHealthToinvoke, () => !wallAlive, () => wallRateTimer >= wallRate);
+        Perception ya_invoque_y_hay_enemigos = FSM_Hero1.CreatePerception<ValuePerception>(() => enemyInRangeCheck, () => wallAlive);
+
+        //Creacion de transiciones
+        FSM_Hero1.CreateTransition("aInvocar", Idle, debo_invocar, Invocar);
+        FSM_Hero1.CreateTransition("aInvocar1", Atacar, debo_invocar, Invocar);
+
+        FSM_Hero1.CreateTransition("aAtacar", Idle, enemigos_debiles, Atacar);
+        FSM_Hero1.CreateTransition("aAtacar1", Invocar, ya_invoque_y_hay_enemigos, Atacar);
+
+        FSM_Hero1.CreateTransition("aIdle", Invocar, no_hay_enemigos, Idle);
+        FSM_Hero1.CreateTransition("aIdle1", Atacar, no_hay_enemigos, Idle);
+
+        FSM_Hero1.CreateTransition("volver a atacar", Atacar, enemigos_debiles, Atacar);
+        FSM_Hero1.CreateTransition("volver a atacar muro", Atacar, ya_invoque_y_hay_enemigos, Atacar);
     }
 
     void accionIdle()
     {
-        Debug.Log("estoy en idle");
-        print("hola");
+        print("Estoy en idle");
     }
     void accionInvocar()
     {
         print("invocar");
+
+        RaycastHit[] groundTilesInRange = Physics.SphereCastAll(transform.position, range, transform.forward, 0, LayerMask.GetMask("Ground"));
+        GameObject bestGroundTile = groundTilesInRange[0].collider.gameObject;
+        float distanceBestGroundTile = groundTilesInRange[0].collider.transform.position.x;
+
+        foreach (var groundTile in groundTilesInRange)
+        {
+            if (groundTile.collider.gameObject.transform.position.x < distanceBestGroundTile)
+            {
+                bestGroundTile = groundTile.collider.gameObject;
+                distanceBestGroundTile = groundTile.collider.gameObject.transform.position.x;
+            }
+        }
+
+        GameObject instWall = Instantiate(wall, bestGroundTile.transform.position, transform.rotation);
+        instWall.GetComponent<Wall>().myHero = this;
+        wallRateTimer = 0;
+        wallAlive = true;
     }
     void accionAtacar()
     {
-        print("ataco");
+        print("Recargando");
+
+        if (fireRateTimer >= fireRate)
+        {
+            print("Ataco");
+            Shoot();
+        }
     }
-    
+    void Shoot()
+    {
+        fireRateTimer = 0;
+
+        GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
+        instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
+    }
 }

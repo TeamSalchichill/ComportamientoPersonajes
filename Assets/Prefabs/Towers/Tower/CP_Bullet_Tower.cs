@@ -5,12 +5,13 @@ using UnityEngine;
 public class CP_Bullet_Tower : MonoBehaviour
 {
     private Transform target;
+
     public int speed = 70;
     public int damage = 100;
 
-    void Start()
+    public void Seek(Transform _target)
     {
-        
+        target = _target;
     }
 
     void Update()
@@ -38,9 +39,5 @@ public class CP_Bullet_Tower : MonoBehaviour
         }
 
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
-    }
-    public void Seek(Transform _target)
-    {
-        target = _target;
     }
 }

@@ -67,6 +67,12 @@ public class CP_EnemigoMediano : MonoBehaviour
             }
         }
 
+        if (Vector3.Distance(transform.position, Vector3.zero) < 3)
+        {
+            print("Llegué");
+            Destroy(gameObject);
+        }
+
         FMS_EnMediano.Update();
     }
 
@@ -121,14 +127,19 @@ public class CP_EnemigoMediano : MonoBehaviour
         {
             avanzar(towerInRange.transform.position);
 
-            if (Vector3.Distance(transform.position, towerInRange.transform.position) < rangeAttack)
+            if (hitRateTimer >= hitRate)
             {
-                if (towerInRange.gameObject.GetComponent<CP_Torres>())
+                if (Vector3.Distance(transform.position, towerInRange.transform.position) < rangeAttack)
                 {
-                    if (hitRateTimer >= hitRate)
+                    hitRateTimer = 0;
+
+                    if (towerInRange.gameObject.GetComponent<CP_Torres>())
                     {
-                        hitRateTimer = 0;
                         towerInRange.gameObject.GetComponent<CP_Torres>().health -= damage;
+                    }
+                    if (towerInRange.gameObject.GetComponent<Wall>())
+                    {
+                        towerInRange.gameObject.GetComponent<Wall>().health -= damage;
                     }
                 }
             }

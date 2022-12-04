@@ -209,3 +209,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6f39f5ea8f86c46a709e1595c436d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullet: {fileID: 3465808365523367459, guid: e610def9e323adf4e8c67d5ac3c7d7d7, type: 3}
+  wall: {fileID: 5204076346377502116, guid: fa943746bfd0dd04da093439fa050608, type: 3}
+  health: 1000
+  range: 15
+  damage: 50
+  fireRate: 0.5
+  enemiesHealthToinvoke: 15000
+  wallAlive: 0
+  wallRate: 3
+  wallRateTimer: 0
+  enemyInRangeCheck: 0
+  enemyInRange: {fileID: 0}

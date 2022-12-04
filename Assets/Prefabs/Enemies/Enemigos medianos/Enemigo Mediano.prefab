@@ -156,7 +156,7 @@ MonoBehaviour:
   health: 5000
   damage: 20
   rangeDetect: 10
-  rangeAttack: 3
+  rangeAttack: 4
   hitRate: 0.5
   towerInRangeCheck: 0
   towerInRange: {fileID: 0}

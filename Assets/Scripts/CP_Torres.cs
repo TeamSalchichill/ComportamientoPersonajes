@@ -22,10 +22,6 @@ public class CP_Torres : MonoBehaviour
     public bool enemyInRangeCheck;
     public GameObject enemyInRange;
 
-    [Header("Debug")]
-    public GameObject emnemigo;
-    int vidaEnemigo = 10000;
-
     void Start()
     {
         gameManager = GameManager.instance;
