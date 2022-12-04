@@ -5,70 +5,69 @@ using UnityEngine;
 public class CP_Hero2_Healer : MonoBehaviour
 {
     public int health = 1000;
-    public bool hayEnemigos = false;
-    public bool torreDañada = false;
-    public bool aumentar = false;
-    public bool paralizar = false;
-
-    int vuelta = 0;
+    public bool enemigos = false;
+    public bool torreDanada = false;
+    public bool timerAumento = false;
+    public bool timerParalizar = false;
 
     BehaviourTreeEngine BT_Heroe2;
+
     void Start()
     {
+        //definimos el arbol
+
         BT_Heroe2 = new BehaviourTreeEngine(BehaviourEngine.IsNotASubmachine);
 
-        //nodo selector
+        //nodos selectores
         SelectorNode selector1 = BT_Heroe2.CreateSelectorNode("MuertoVivo");
         SelectorNode selector2 = BT_Heroe2.CreateSelectorNode("AccionesVivo");
 
-        //nodo secuencia (arriba a abajo , izquierda derecha)
+        //nodos secuencia
         SequenceNode secuencia1 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarMuerte", false);
-        SequenceNode secuencia2 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarEnemigo", false);
-        SequenceNode secuencia3 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarHayTorreDañada", false);
-        SequenceNode secuencia4 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarAccionHeroe", false);
-        SequenceNode secuencia5 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarAumentoVel", false);
-        SequenceNode secuencia6 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarParalizar", false);
+        SequenceNode secuencia2 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarAumento", false);
+        SequenceNode secuencia3 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarParalizar", false);
+        SequenceNode secuencia4 = BT_Heroe2.CreateSequenceNode("SecuenciaAtacar", false);
+        SequenceNode secuencia5 = BT_Heroe2.CreateSequenceNode("SecuenciaComprobarTorreDebil", false);
 
         //nodos hoja
-        LeafNode comprobarVida = BT_Heroe2.CreateLeafNode("¿Vida <= 0?", circuloAmarillo, ComprobarVida);
+        LeafNode comprobarVida = BT_Heroe2.CreateLeafNode("¿Vida<= 0?", circuloAmarillo, ComprobarVida);
         LeafNode NodoMuerte = BT_Heroe2.CreateLeafNode("Muero", Morir, alwaysSuccedeed);
+
+        LeafNode comprobarAumento = BT_Heroe2.CreateLeafNode("¿AumentarVelocidad?", circuloAmarillo, ComprobarAumento);
+        LeafNode comprobarEnemigo1 = BT_Heroe2.CreateLeafNode("¿HayEnemigo1?", circuloAmarillo, ComprobarEnemigo);
+        LeafNode NodoAumento = BT_Heroe2.CreateLeafNode("Aumento", Aumentar, alwaysSuccedeed);
+
+        LeafNode comprobarEnemigo2 = BT_Heroe2.CreateLeafNode("¿HayEnemigo2?", circuloAmarillo, ComprobarEnemigo);
+        LeafNode comprobarGolpe = BT_Heroe2.CreateLeafNode("¿MeHanGolpeado?", circuloAmarillo, ComprobarGolpe);
+        LeafNode NodoParalizar = BT_Heroe2.CreateLeafNode("Palarizar", Paralizar, alwaysSuccedeed);
+
+        LeafNode comprobarEnemigo3 = BT_Heroe2.CreateLeafNode("¿HayEnemigo3?", circuloAmarillo, ComprobarEnemigo);
+        LeafNode NodoAtacar = BT_Heroe2.CreateLeafNode("Atacar", Atacar, alwaysSuccedeed);
+
+        LeafNode comprobarTorre = BT_Heroe2.CreateLeafNode("¿HayTorreDanada?", circuloAmarillo, ComprobarHayTorreDanada);
+        LeafNode NodoCurar = BT_Heroe2.CreateLeafNode("Curar", Curar, alwaysSuccedeed);
 
         LeafNode NodoParar = BT_Heroe2.CreateLeafNode("Parar", Idle, alwaysSuccedeed);
 
-        LeafNode comprobarHayEnemigo = BT_Heroe2.CreateLeafNode("¿Hay Enemigo?", circuloAmarillo, ComprobarHayEnemigo);
-        LeafNode NodoAtacar = BT_Heroe2.CreateLeafNode("Atacar",Atacar, alwaysSuccedeed);
-        LeafNode comprobarTorre = BT_Heroe2.CreateLeafNode("¿Hay torre dañada?", circuloAmarillo, ComprobarHayTorreDañada);
-        LeafNode NodoCurar = BT_Heroe2.CreateLeafNode("Curar",Curar, alwaysSuccedeed);
-
-        LeafNode comprobaraumentoVel = BT_Heroe2.CreateLeafNode("¿Puedo aumentar velocidad?", circuloAmarillo, ComprobarPuedoAumentarVel);
-        LeafNode NodoAumentarVel = BT_Heroe2.CreateLeafNode("AumentarVel", Aumento, alwaysSuccedeed);
-        LeafNode comprobarGolpeado = BT_Heroe2.CreateLeafNode("¿Me han golpeado?", circuloAmarillo, ComprobarMeHanGolpeado);
-        LeafNode NodoParalizar =  BT_Heroe2.CreateLeafNode("Paralizar", Paralizo, alwaysSuccedeed);
-
         //añadimos hijos a los nodos (debajo a arriba)
+        secuencia2.AddChild(comprobarAumento);
+        secuencia2.AddChild(comprobarEnemigo1);
+        secuencia2.AddChild(NodoAumento);
 
-        secuencia5.AddChild(comprobaraumentoVel);
-        secuencia5.AddChild(NodoAumentarVel);
+        secuencia3.AddChild(comprobarEnemigo2);
+        secuencia3.AddChild(comprobarGolpe);
+        secuencia3.AddChild(NodoParalizar);
 
-        secuencia6.AddChild(comprobarGolpeado);
-        secuencia6.AddChild(NodoParalizar);
+        secuencia4.AddChild(comprobarEnemigo3);
+        secuencia4.AddChild(NodoAtacar);
 
-        //los succeder 
-        SucceederDecoratorNode exitoAumento = BT_Heroe2.CreateSucceederNode("ExitoAumento", secuencia5);
-        SucceederDecoratorNode exitoParalizar = BT_Heroe2.CreateSucceederNode("ExitoParalizar", secuencia6);
-
-        secuencia4.AddChild(exitoAumento);
-        secuencia4.AddChild(exitoParalizar);
-
-        secuencia2.AddChild(comprobarHayEnemigo);
-        secuencia2.AddChild(secuencia4);
-        secuencia2.AddChild(NodoAtacar);
-
-        secuencia3.AddChild(comprobarTorre);
-        secuencia3.AddChild(NodoCurar);
+        secuencia5.AddChild(comprobarTorre);
+        secuencia5.AddChild(NodoCurar);
 
         selector2.AddChild(secuencia2);
         selector2.AddChild(secuencia3);
+        selector2.AddChild(secuencia4);
+        selector2.AddChild(secuencia5);
         selector2.AddChild(NodoParar);
 
         secuencia1.AddChild(comprobarVida);
@@ -78,124 +77,119 @@ public class CP_Hero2_Healer : MonoBehaviour
         selector1.AddChild(selector2);
 
         //Nodo inicial 
-        LoopUntilFailDecoratorNode NodoInicial= BT_Heroe2.CreateLoopUntilFailNode("LoopUntilFail", selector1);
+        LoopUntilFailDecoratorNode NodoInicial = BT_Heroe2.CreateLoopUntilFailNode("LoopUntilFail", selector1);
 
         //Definir el nodo raiz
         BT_Heroe2.SetRootNode(NodoInicial);
-    }
 
+
+    }
     void Update()
     {
         BT_Heroe2.Update();
 
     }
-
     void circuloAmarillo()
     {
-        print("soy una bola amarilla, es decir una pregunta ");
+        // print("soy una bola amarilla, es decir una pregunta ");
     }
     void Morir()
     {
         print("estoy muerto");
     }
-    void Idle()
+    void Aumentar()
     {
-        print("estoy en idle");
+        print("aumento velocidad");
+    }
+    void Paralizar()
+    {
+        print("paralizo");
     }
     void Atacar()
     {
-        print("ataco");
+        print("atacar");
     }
     void Curar()
     {
         print("curar");
     }
-    void Aumento()
+    void Idle()
     {
-        print("aumento");
-    }
-    void Paralizo()
-    {
-        print("paralizo");
-    }
-
-    ReturnValues ComprobarVida()
-    {
-        if(health <= 0)
-        {
-            return ReturnValues.Succeed;
-        }
-        else
-        {
-            return ReturnValues.Failed;
-        }
+        print("estoy en idle");
     }
     ReturnValues alwaysSuccedeed()
     {
         return ReturnValues.Succeed;
     }
-    ReturnValues ComprobarHayEnemigo()
+    ReturnValues ComprobarVida()
     {
-        if (hayEnemigos == true)
+        if (health <= 0)
         {
             return ReturnValues.Succeed;
         }
         else
         {
+            print("mi vida es:" + health);
             return ReturnValues.Failed;
         }
     }
-    ReturnValues ComprobarHayTorreDañada()
+    ReturnValues ComprobarAumento()
+    {
+        if (timerAumento == true)
+        {
+            print("puedo aumentar");
+            return ReturnValues.Succeed;
+        }
+        else
+        {
+            print("no puedo aumentar");
+            return ReturnValues.Failed;
+        }
+    }
+    ReturnValues ComprobarEnemigo()
+    {
+        if (enemigos == true)
+        {
+            print("hay enemigos");
+            return ReturnValues.Succeed;
+        }
+        else
+        {
+            print("no hay enemigos");
+            return ReturnValues.Failed;
+        }
+    }
+    ReturnValues ComprobarGolpe()
+    {
+        if (timerParalizar == true)
+        {
+            print("me han golpeado");
+            return ReturnValues.Succeed;
+        }
+        else
+        {
+            print("no me han golpeado");
+            return ReturnValues.Failed;
+        }
+    }
+    ReturnValues ComprobarHayTorreDanada()
     {
         //si hay una torre dañada
         //return ReturnValues.Succeed;
         //si no hay torre danada
         //return ReturnValues.Failed;
 
-        if (torreDañada == true)
+        if (torreDanada == true)
         {
+            print("hay torre dañada");
             return ReturnValues.Succeed;
         }
         else
         {
+            print("No hay torre dañada");
             return ReturnValues.Failed;
         }
 
     }
-    ReturnValues ComprobarPuedoAumentarVel()
-    {
-        //si ha pasado el tiempo
-        //comprobar que torre ha matado mas
-        //return ReturnValues.Succeed;
-        //si no ha pasado el tiempo
-        //return ReturnValues.Failed;
 
-        if (aumentar == true)
-        {
-            return ReturnValues.Succeed;
-        }
-        else
-        {
-            return ReturnValues.Failed;
-        }
-
-    }
-    ReturnValues ComprobarMeHanGolpeado()
-    {
-        //si me golpean
-        //se selcciona a quien a golpeado
-        //return ReturnValues.Succeed;
-        //si no me golpean
-        //return ReturnValues.Failed;
-
-        if (paralizar == true)
-        {
-            return ReturnValues.Succeed;
-        }
-        else
-        {
-            return ReturnValues.Failed;
-        }
-
-    }
 }
