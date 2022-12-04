@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 3666194440355202827}
   - component: {fileID: 6215907108344581423}
   - component: {fileID: 6404852433144792402}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemigo Mediano
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,11 +153,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
-  health: 100
-  range: 10
+  health: 5000
+  damage: 20
+  rangeDetect: 10
+  rangeAttack: 3
+  hitRate: 0.5
   towerInRangeCheck: 0
   towerInRange: {fileID: 0}
-  enemy: {fileID: 0}
+  enemyInRangeCheck: 0
+  enemyInRange: {fileID: 0}
 --- !u!1 &5214980060079830445
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +174,7 @@ GameObject:
   - component: {fileID: 6888544903451877780}
   - component: {fileID: 3503046852176960599}
   - component: {fileID: 4627668581332508316}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

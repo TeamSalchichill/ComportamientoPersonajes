@@ -14,7 +14,11 @@ public class CP_EnemigoMediano : MonoBehaviour
 
     [Header("Stats")]
     public int health;
-    public int range;
+    public int damage;
+    public int rangeDetect;
+    public int rangeAttack;
+    public float hitRate;
+    float hitRateTimer;
 
     [Header("Checks variables")]
     public bool towerInRangeCheck;
@@ -22,10 +26,6 @@ public class CP_EnemigoMediano : MonoBehaviour
 
     public bool enemyInRangeCheck;
     public GameObject enemyInRange;
-
-    [Header("Debug")]
-    //public GameObject tower;
-    public GameObject enemy;
 
     void Start()
     {
@@ -35,16 +35,20 @@ public class CP_EnemigoMediano : MonoBehaviour
         //nav.destination = gameManager.mainTower.transform.position;
         nav.SetDestination(Vector3.zero);
 
+        hitRateTimer = hitRate;
+
         CreateFMS();
     }
 
     void Update()
     {
+        hitRateTimer += Time.deltaTime;
+
         towerInRangeCheck = false;
         towerInRange = null;
         foreach (GameObject tower in gameManager.towers)
         {
-            if (Vector3.Distance(transform.position, tower.transform.position) < range)
+            if (Vector3.Distance(transform.position, tower.transform.position) < rangeDetect)
             {
                 towerInRangeCheck = true;
                 towerInRange = tower;
@@ -55,7 +59,7 @@ public class CP_EnemigoMediano : MonoBehaviour
         enemyInRange = null;
         foreach (GameObject enemy in gameManager.enemies)
         {
-            if (Vector3.Distance(transform.position, enemy.transform.position) < range)
+            if (Vector3.Distance(transform.position, enemy.transform.position) < rangeDetect)
             {
                 enemyInRangeCheck = true;
                 enemyInRange = enemy;
@@ -95,6 +99,8 @@ public class CP_EnemigoMediano : MonoBehaviour
         FMS_EnMediano.CreateTransition("muriendo1", EMs_avanzar, EMp_sin_vida, EMs_morir);
         FMS_EnMediano.CreateTransition("muriendo2", EMs_cambiar_camino, EMp_sin_vida, EMs_morir);
         FMS_EnMediano.CreateTransition("muriendo3", EMs_atacar, EMp_sin_vida, EMs_morir);
+        //Volver a atacar
+        FMS_EnMediano.CreateTransition("volver a atacar", EMs_atacar, EMp_hay_torreta, EMs_atacar);
     }
 
     void EM_avanzar()
@@ -114,6 +120,18 @@ public class CP_EnemigoMediano : MonoBehaviour
         if (towerInRange)
         {
             avanzar(towerInRange.transform.position);
+
+            if (Vector3.Distance(transform.position, towerInRange.transform.position) < rangeAttack)
+            {
+                if (towerInRange.gameObject.GetComponent<CP_Torres>())
+                {
+                    if (hitRateTimer >= hitRate)
+                    {
+                        hitRateTimer = 0;
+                        towerInRange.gameObject.GetComponent<CP_Torres>().health -= damage;
+                    }
+                }
+            }
         }
         else
         {

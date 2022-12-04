@@ -5,21 +5,14 @@ using UnityEngine;
 public class CP_Bullet_Tower : MonoBehaviour
 {
     private Transform target;
-    public float speed = 70f;
-    public int healthDamage = 100;
+    public int speed = 70;
+    public int damage = 100;
 
-    public void Seek(Transform _target)
-    {
-        target = _target;
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (target == null)
@@ -35,11 +28,19 @@ public class CP_Bullet_Tower : MonoBehaviour
 
         if (dir.magnitude <= distanceThisFrame)
         {
-            // HitTarget();
+            if (target.gameObject.GetComponent<CP_EnemigoMediano>())
+            {
+                target.gameObject.GetComponent<CP_EnemigoMediano>().health -= damage;
+                Destroy(gameObject);
+            }
             print("Ha golpeado");
             return;
         }
 
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+    }
+    public void Seek(Transform _target)
+    {
+        target = _target;
     }
 }

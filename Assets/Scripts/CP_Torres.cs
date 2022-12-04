@@ -6,14 +6,58 @@ public class CP_Torres : MonoBehaviour
 {
     StateMachineEngine FMS_Torres;
 
-    public int health;
-    //public bool hayenemigo;
-    public float range;
-    public GameObject emnemigo;
+    GameManager gameManager;
 
-    public GameObject bala;
+    [Header("External GamObjects")]
+    public GameObject bullet;
+
+    [Header("Stats")]
+    public int health;
+    public int range;
+    public int damage;
+    public float fireRate;
+    float fireRateTimer;
+
+    [Header("Checks variables")]
+    public bool enemyInRangeCheck;
+    public GameObject enemyInRange;
+
+    [Header("Debug")]
+    public GameObject emnemigo;
     int vidaEnemigo = 10000;
+
     void Start()
+    {
+        gameManager = GameManager.instance;
+
+        fireRateTimer = fireRate;
+
+        CreateFMS();
+    }
+
+    void Update()
+    {
+        fireRateTimer += Time.deltaTime;
+
+        enemyInRangeCheck = false;
+        enemyInRange = null;
+        foreach (GameObject enemy in gameManager.enemies)
+        {
+            if (enemy)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < range)
+                {
+                    enemyInRangeCheck = true;
+                    enemyInRange = enemy;
+                    break;
+                }
+            }
+        }
+
+        FMS_Torres.Update();
+    }
+
+    void CreateFMS()
     {
         FMS_Torres = new StateMachineEngine(false);
 
@@ -23,8 +67,8 @@ public class CP_Torres : MonoBehaviour
         State Ts_morir = FMS_Torres.CreateState("morir", T_muerte);
 
         //Creación de percepciones
-        Perception Tp_hay_enemigo = FMS_Torres.CreatePerception<ValuePerception>(() => Vector3.Distance(transform.position, emnemigo.transform.position) < range);
-        Perception Tp_no_hay_enemigo = FMS_Torres.CreatePerception<ValuePerception>(() => Vector3.Distance(transform.position, emnemigo.transform.position) > range);
+        Perception Tp_hay_enemigo = FMS_Torres.CreatePerception<ValuePerception>(() => enemyInRangeCheck);
+        Perception Tp_no_hay_enemigo = FMS_Torres.CreatePerception<ValuePerception>(() => !enemyInRangeCheck);
         Perception Tp_sin_vida = FMS_Torres.CreatePerception<ValuePerception>(() => health <= 0);
 
         //Creación transiciones
@@ -36,21 +80,19 @@ public class CP_Torres : MonoBehaviour
         FMS_Torres.CreateTransition("muriendo atacando", Ts_atacar, Tp_sin_vida, Ts_morir);
         //Si no tengo vida no atacando muero
         FMS_Torres.CreateTransition("muriendo no atacando", Ts_no_atacar, Tp_sin_vida, Ts_morir);
-    }
-
-    void Update()
-    {
-        FMS_Torres.Update();
+        //Volver a atacar
+        FMS_Torres.CreateTransition("volver a atacar", Ts_atacar, Tp_hay_enemigo, Ts_atacar);
     }
 
     void T_atacando()
     {
-        print("Ataco");
-        while (vidaEnemigo > 0)
+        print("Recargando");
+
+        if (fireRateTimer >= fireRate)
         {
+            print("Ataco");
             Shoot();
         }
-      
     }
 
     void T_no_atacando()
@@ -66,10 +108,9 @@ public class CP_Torres : MonoBehaviour
 
     void Shoot()
     {
-       // vidaEnemigo--;
-       // print(vidaEnemigo);
+        fireRateTimer = 0;
 
-        GameObject instBullet = Instantiate(bala, transform.position, transform.rotation);
-        instBullet.GetComponent<CP_Bullet_Tower>().Seek(emnemigo.transform);
+        GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
+        instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
     }
 }
