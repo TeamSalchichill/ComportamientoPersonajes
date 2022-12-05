@@ -164,8 +164,11 @@ public class CP_EnemigoEnano : MonoBehaviour
     void AtacarA()
     {
         print("Atacar");
-        nav.SetDestination(towerInRange.transform.position);
-
+        if (towerInRange)
+        {
+            nav.SetDestination(towerInRange.transform.position);
+        }
+        
         if (hitRateTimer >= hitRate)
         {
             if (Vector3.Distance(transform.position, towerInRange.transform.position) < range)

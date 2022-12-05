@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1803203160238499524}
   - component: {fileID: 9205208998887068629}
   - component: {fileID: 492034006459113162}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hero 2- Healer
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 3393061774773261011}
   - component: {fileID: 618693304515180011}
   - component: {fileID: 5447815673305617239}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

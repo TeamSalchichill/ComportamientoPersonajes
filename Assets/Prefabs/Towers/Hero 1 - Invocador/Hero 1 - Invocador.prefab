@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2528221376004376494}
   - component: {fileID: 4006619009045047554}
   - component: {fileID: 6030288450208180617}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,9 +110,9 @@ GameObject:
   - component: {fileID: 8938717248466738666}
   - component: {fileID: 3971125396543286202}
   - component: {fileID: 176863372142915301}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hero 1 - Invocador
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

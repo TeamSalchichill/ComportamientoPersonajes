@@ -1,31 +1,124 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CP_Boss1_Invocador : MonoBehaviour
 {
     BehaviourTreeEngine Boss1BT;
 
-    public int health = 100;
+    GameManager gameManager;
 
-    public float timer = 0;
+    [Header("Components")]
+    public NavMeshAgent nav;
 
-    public GameObject mainTower;
+    [Header("External GameObjects")]
+    public GameObject enemyToInvoke;
 
-    public GameObject tower;
+    [Header("Stats")]
+    public int health;
+    public int damage;
+    public int range;
+    public int speed;
+    public float abilityRate;
+    float abilityRateTimer;
+    public float hitRate;
+    float hitRateTimer;
+    [Space]
+    public int rangeDetectMainTower;
+    public int rangeDetectTower;
 
-    public int numEnemiesStored = 0;
+    [Header("Checks variables")]
+    public bool towerInRangeCheck;
+    public GameObject towerInRange;
 
-    public bool isMove;
+    public bool towerInRangeRunCheck;
+    public GameObject towerInRangeRun;
+
+    public bool wallInRangeCheck;
+    public GameObject wallInRange;
+    [Space]
+    public int numEnemiesStored;
+    public int numEnemiesStoredMax;
 
     void Start()
     {
+        gameManager = GameManager.instance;
+
+        nav = GetComponent<NavMeshAgent>();
+        nav.SetDestination(Vector3.zero);
+        nav.speed = speed;
+
+        abilityRateTimer = abilityRate;
+        hitRateTimer = hitRate;
+
         CreateBT();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        abilityRateTimer += Time.deltaTime;
+        hitRateTimer += Time.deltaTime;
+
+        towerInRangeCheck = false;
+        towerInRange = null;
+        towerInRangeRunCheck = false;
+        towerInRangeRun = null;
+        wallInRangeCheck = false;
+        wallInRange = null;
+        foreach (GameObject tower in gameManager.towers)
+        {
+            if (tower)
+            {
+                if (Vector3.Distance(transform.position, tower.transform.position) < range)
+                {
+                    if (tower.GetComponent<CP_Torres>())
+                    {
+                        if (!towerInRangeCheck)
+                        {
+                            towerInRangeCheck = true;
+                            towerInRange = tower;
+                        }
+                    }
+                    if (tower.GetComponent<Wall>())
+                    {
+                        if (!wallInRangeCheck)
+                        {
+                            wallInRangeCheck = true;
+                            wallInRange = tower;
+                        }
+                    }
+                    if (tower.GetComponent<CP_Hero1_Invocador>())
+                    {
+                        if (!towerInRangeCheck)
+                        {
+                            towerInRangeCheck = true;
+                            towerInRange = tower;
+                        }
+                    }
+                    if (tower.GetComponent<CP_Hero2_Healer>())
+                    {
+                        if (!towerInRangeCheck)
+                        {
+                            towerInRangeCheck = true;
+                            towerInRange = tower;
+                        }
+                    }
+                }
+                if (Vector3.Distance(transform.position, tower.transform.position) < rangeDetectTower)
+                {
+                    towerInRangeRunCheck = true;
+                    towerInRangeRun = tower;
+                }
+            }
+        }
+
+        if (Vector3.Distance(transform.position, Vector3.zero) < 3)
+        {
+            print("Llegué");
+            gameManager.numEnemiesMedium--;
+            Destroy(gameObject);
+        }
 
         Boss1BT.Update();
     }
@@ -56,7 +149,7 @@ public class CP_Boss1_Invocador : MonoBehaviour
         //Almacenamiento maximo alcanzado
         LeafNode MaxStoreCheckLeaf = Boss1BT.CreateLeafNode("MaxStoreCheckLeaf", NullAction, CheckStorageDistance);
         //Accion Correr e Invocar
-        LeafNode MaxStoreRunInvokeLeaf = Boss1BT.CreateLeafNode("MaxStoreRunInvokeLeaf", RunInvokeStore, AlwaysSucced);
+        LeafNode MaxStoreRunInvokeLeaf = Boss1BT.CreateLeafNode("MaxStoreRunInvokeLeaf", InvokeStore, AlwaysSucced);
 
         // MiniTree 5 - SubTimer Childs
         // Add child Main Tower
@@ -163,27 +256,28 @@ public class CP_Boss1_Invocador : MonoBehaviour
     ReturnValues CheckHealth()
     {
         print("Check Health");
-        if (health > 0)
+        if (health <= 0)
         {
-            print("Fail Health");
-            return ReturnValues.Failed;
+            print("Succeed Health");
+            return ReturnValues.Succeed;
         }
         else
         {
-            print("Succed Health");
-            return ReturnValues.Succeed;
+            print("Fail Health");
+            return ReturnValues.Failed;
         }
     }
     void Dead()
     {
         print("Dead");
+        Destroy(gameObject);
     }
 
     // Timer
     ReturnValues CheckTimer()
     {
         print("Check Timer");
-        if (timer < 3)
+        if (abilityRateTimer < abilityRate)
         {
             print("Fail Timer");
             return ReturnValues.Failed;
@@ -191,6 +285,7 @@ public class CP_Boss1_Invocador : MonoBehaviour
         else
         {
             print("Succed Timer");
+            abilityRateTimer = 0;
             return ReturnValues.Succeed;
         }
     }
@@ -199,7 +294,7 @@ public class CP_Boss1_Invocador : MonoBehaviour
     ReturnValues CheckMainTowerDistance()
     {
         print("Check Main Tower Distance");
-        if (Vector3.Distance(transform.position, mainTower.transform.position) > 5)
+        if (Vector3.Distance(transform.position, gameManager.mainTower.transform.position) > rangeDetectMainTower)
         {
             print("Fail Main Tower Distance");
             return ReturnValues.Failed;
@@ -213,33 +308,43 @@ public class CP_Boss1_Invocador : MonoBehaviour
     void RunMainTower()
     {
         print("Run Main Tower");
+        nav.speed = speed * 4;
     }
 
     // Normal Tower
     ReturnValues CheckNormalTowerDistance()
     {
         print("Check Tower Distance");
-        if (Vector3.Distance(transform.position, tower.transform.position) > 5)
-        {
-            print("Fail Tower Distance");
-            return ReturnValues.Failed;
-        }
-        else
+        if (towerInRangeRun)
         {
             print("Succed Tower Distance");
             return ReturnValues.Succeed;
         }
+        else
+        {
+            print("Fail Tower Distance");
+            return ReturnValues.Failed;
+        }
+        
     }
     void RunInvokeTower()
     {
         print("Run Invoke Tower");
+        nav.speed = speed * 4;
+        Invoke("NormalSpeed", 2);
+    }
+    void NormalSpeed()
+    {
+        nav.speed = speed / 4;
+        StartCoroutine(SpawnEnemies(numEnemiesStored));
+        numEnemiesStored = 0;
     }
 
-    // Store
+    // Store Max
     ReturnValues CheckStorageDistance()
     {
         print("Check Store");
-        if (Vector3.Distance(transform.position, tower.transform.position) > 5 || numEnemiesStored <= 0)
+        if (numEnemiesStored < numEnemiesStoredMax)
         {
             print("Fail Store");
             return ReturnValues.Failed;
@@ -250,36 +355,49 @@ public class CP_Boss1_Invocador : MonoBehaviour
             return ReturnValues.Succeed;
         }
     }
-    void RunInvokeStore()
+    void InvokeStore()
     {
         print("Run Invoke Store");
+        StartCoroutine(SpawnEnemies(numEnemiesStored));
+        numEnemiesStored = 0;
+    }
+    IEnumerator SpawnEnemies(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            Instantiate(enemyToInvoke, new Vector3(transform.position.x, 0, transform.position.z) + (transform.forward * 2), transform.rotation);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     // Final Store
     void StoreFinal()
     {
         print("Enemies Storaged");
+        numEnemiesStored += 2;
+        numEnemiesStored = Mathf.Min(numEnemiesStored, numEnemiesStoredMax);
     }
 
     // Movement
     ReturnValues CheckStopTower()
     {
         print("Check Stop Tower");
-        if (Vector3.Distance(transform.position, tower.transform.position) > 2)
-        {
-            print("Fail Stop Tower");
-            return ReturnValues.Failed;
-        }
-        else
+        if (wallInRange)
         {
             print("Succed Stop Tower");
             return ReturnValues.Succeed;
         }
+        else
+        {
+            print("Fail Stop Tower");
+            return ReturnValues.Failed;
+        }
+        
     }
     ReturnValues CheckStopMove()
     {
         print("Check Stop Move");
-        if (!isMove)
+        if (nav.speed == 0)
         {
             print("Fail Stop Move");
             return ReturnValues.Failed;
@@ -293,45 +411,67 @@ public class CP_Boss1_Invocador : MonoBehaviour
     void Stop()
     {
         print("Stop");
+        nav.speed = 0;
     }
 
     // Attack
     ReturnValues CheckAttackTower()
     {
-        print("Check Attack Tower");
-        if (Vector3.Distance(transform.position, tower.transform.position) > 2)
+        if (towerInRange && hitRateTimer >= hitRate)
         {
-            print("Fail Attack Tower");
-            return ReturnValues.Failed;
+            print("Succed Attack Tower");
+            hitRateTimer = 0;
+            return ReturnValues.Succeed;
         }
         else
         {
-            print("Succed Attack Tower");
-            return ReturnValues.Succeed;
+            print("Fail Attack Tower");
+            //nav.SetDestination(Vector3.zero);
+            return ReturnValues.Failed;
         }
     }
     void Attack()
     {
         print("Attack");
+
+        nav.SetDestination(new Vector3(towerInRange.transform.position.x, 0, towerInRange.transform.position.z));
+
+        if (towerInRange.GetComponent<CP_Torres>())
+        {
+            towerInRange.GetComponent<CP_Torres>().health -= damage;
+        }
+        if (towerInRange.GetComponent<CP_Hero1_Invocador>())
+        {
+            towerInRange.GetComponent<CP_Hero1_Invocador>().health -= damage;
+        }
+        if (towerInRange.GetComponent<CP_Hero2_Healer>())
+        {
+            towerInRange.GetComponent<CP_Hero2_Healer>().health -= damage;
+        }
     }
 
     // Move
     ReturnValues CheckMoveTower()
     {
         print("Check Move Tower");
-        if (Vector3.Distance(transform.position, tower.transform.position) > 5)
-        {
-            print("Fail Move Tower");
-            return ReturnValues.Failed;
-        }
-        else
+        if (!towerInRange)
         {
             print("Succed Move Tower");
             return ReturnValues.Succeed;
+        }
+        else
+        {
+            print("Fail Move Tower");
+            return ReturnValues.Failed;
         }
     }
     void Move()
     {
         print("Move");
+        if (nav.speed == 0)
+        {
+            nav.speed = speed;
+        }
+        nav.SetDestination(Vector3.zero);
     }
 }

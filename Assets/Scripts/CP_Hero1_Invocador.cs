@@ -64,9 +64,17 @@ public class CP_Hero1_Invocador : MonoBehaviour
                         enemyInRange = enemy;
                     }
 
+                    if (enemy.GetComponent<CP_EnemigoEnano>())
+                    {
+                        enemiesHealth += enemy.GetComponent<CP_EnemigoEnano>().health;
+                    }
                     if (enemy.GetComponent<CP_EnemigoMediano>())
                     {
                         enemiesHealth += enemy.GetComponent<CP_EnemigoMediano>().health;
+                    }
+                    if (enemy.GetComponent<CP_Boss1_Invocador>())
+                    {
+                        enemiesHealth += enemy.GetComponent<CP_Boss1_Invocador>().health;
                     }
                 }
             }

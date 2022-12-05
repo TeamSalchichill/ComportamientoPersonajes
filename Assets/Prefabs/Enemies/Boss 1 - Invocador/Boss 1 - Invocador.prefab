@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7649877476913566390}
   - component: {fileID: 5953312237886725373}
   - component: {fileID: 2066159787662654496}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,9 +111,9 @@ GameObject:
   - component: {fileID: 8620019921731835078}
   - component: {fileID: 7745681414020194936}
   - component: {fileID: 5369329966581929324}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Boss 1 - Invocador
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -232,9 +232,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b8bbcff435f2944eae9e96d5e46e1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  timer: 0
-  mainTower: {fileID: 0}
-  tower: {fileID: 0}
+  nav: {fileID: 0}
+  enemyToInvoke: {fileID: 4699802660576057789, guid: 0c23b9fe5f5ab4442acaccd472457468, type: 3}
+  health: 20000
+  damage: 50
+  range: 8
+  speed: 3
+  abilityRate: 5
+  hitRate: 2
+  rangeDetectMainTower: 30
+  rangeDetectTower: 15
+  towerInRangeCheck: 0
+  towerInRange: {fileID: 0}
+  towerInRangeRunCheck: 0
+  towerInRangeRun: {fileID: 0}
+  wallInRangeCheck: 0
+  wallInRange: {fileID: 0}
   numEnemiesStored: 0
-  isMove: 0
+  numEnemiesStoredMax: 5
