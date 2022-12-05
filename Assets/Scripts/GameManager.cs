@@ -23,16 +23,14 @@ public class GameManager : MonoBehaviour
     public GameObject[] towers;
     public GameObject[] enemies;
 
+    public int totalKilss;
     public bool help;
+    public List<GameObject> enemiesHelp;
+    public int numEnemiesMedium;
 
     void Awake()
     {
         instance = this;
-    }
-
-    void Start()
-    {
-        
     }
 
     void Update()
@@ -44,6 +42,12 @@ public class GameManager : MonoBehaviour
         {
             //Instantiate(enemyMedium, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
             Instantiate(enemyMedium, spawns[0].transform.position, transform.rotation);
+            numEnemiesMedium++;
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            //Instantiate(enemyMedium, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
+            Instantiate(enemySmall, spawns[0].transform.position, transform.rotation);
         }
     }
 }
