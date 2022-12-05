@@ -114,12 +114,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 3465808365523367459, guid: e610def9e323adf4e8c67d5ac3c7d7d7, type: 3}
   health: 100
+  healthMax: 0
   range: 20
   damage: 20
   fireRate: 1
+  kills: 0
+  numTowerNear: 0
+  numEnemiesNear: 0
   enemyInRangeCheck: 0
   enemyInRange: {fileID: 0}
-  emnemigo: {fileID: 0}
 --- !u!1 &7100369551920950127
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +135,7 @@ GameObject:
   - component: {fileID: 4839636132574705778}
   - component: {fileID: 7006829308521439588}
   - component: {fileID: 7865642880871744633}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

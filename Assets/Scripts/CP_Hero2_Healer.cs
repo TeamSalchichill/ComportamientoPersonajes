@@ -302,4 +302,12 @@ public class CP_Hero2_Healer : MonoBehaviour
             return ReturnValues.Failed;
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ImpactDamage")
+        {
+            health -= 250;
+        }
+    }
 }

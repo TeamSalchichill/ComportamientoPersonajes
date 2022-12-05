@@ -165,4 +165,12 @@ public class CP_Hero1_Invocador : MonoBehaviour
         GameObject instBullet = Instantiate(bullet, transform.position, transform.rotation);
         instBullet.GetComponent<CP_Bullet_Tower>().Seek(enemyInRange.transform);
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ImpactDamage")
+        {
+            health -= 250;
+        }
+    }
 }

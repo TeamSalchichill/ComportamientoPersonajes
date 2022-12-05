@@ -19,6 +19,9 @@ public class CP_Torres : MonoBehaviour
     public float fireRate;
     float fireRateTimer;
     public int kills;
+    [Space]
+    public int numTowerNear;
+    public int numEnemiesNear;
 
     [Header("Checks variables")]
     public bool enemyInRangeCheck;
@@ -55,6 +58,15 @@ public class CP_Torres : MonoBehaviour
                 }
             }
         }
+
+        ////////////////////////////////////
+
+        RaycastHit[] towersInRange = Physics.SphereCastAll(transform.position, 8, transform.up, 0, LayerMask.GetMask("Tower"));
+        numTowerNear = towersInRange.Length;
+        RaycastHit[] enemiesInRange = Physics.SphereCastAll(transform.position, 8, transform.up, 0, LayerMask.GetMask("Enemy"));
+        numEnemiesNear = enemiesInRange.Length;
+
+        ////////////////////////////////////
 
         FMS_Torres.Update();
     }
@@ -110,5 +122,13 @@ public class CP_Torres : MonoBehaviour
     {
         print("Hasta luego");
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ImpactDamage")
+        {
+            health -= 250;
+        }
     }
 }

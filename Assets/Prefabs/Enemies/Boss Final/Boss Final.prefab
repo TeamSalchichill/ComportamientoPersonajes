@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 7398709100889969900}
   - component: {fileID: 1968075605033152867}
   - component: {fileID: 7838826677198338645}
-  - component: {fileID: 521313465102110965}
-  m_Layer: 0
+  - component: {fileID: 2825684155637690838}
+  m_Layer: 6
   m_Name: Boss Final
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4004793061155385451}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 5369100822007237853}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &7398709100889969900
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100,28 +100,44 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!195 &521313465102110965
-NavMeshAgent:
+--- !u!114 &2825684155637690838
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4004793061155385451}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.2
-  m_Speed: 2
-  m_Acceleration: 4
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e228effce63014e87f01a09100234e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySmall: {fileID: 4699802660576057789, guid: 0c23b9fe5f5ab4442acaccd472457468, type: 3}
+  enemyMedium: {fileID: 4427443835775716937, guid: 031d283456adf294dbc66683ff49fd27, type: 3}
+  bosses:
+  - {fileID: 6414742308018375288, guid: e68049fd6e365d94486758baf39d3862, type: 3}
+  - {fileID: 1161774016405131427, guid: 301ea7f64412c1947b403cf7facfb627, type: 3}
+  fireBall: {fileID: 2522496611213908617, guid: e699de43e818b5845be1994212a6d904, type: 3}
+  crossDisable: {fileID: 784600066330994019, guid: d705179ca91e38c45bce096c06585bb6, type: 3}
+  fly: {fileID: 0}
+  health: 1000
+  abilityRate: 10
+  fireBallRate: 6
+  disableTowerRate: 5
+  invokeFlyRate: 4
+  totalResources: 500
+  actualResources: 0
+  resourceRate: 10
+  bossRate: 30
+  canFireBall: 1
+  bestZoneFireBallMax: 0
+  bestZoneFireBall: {x: 0, y: 0, z: 0}
+  canDisableTower: 1
+  bestTowerMax: 0
+  bestTower: {fileID: 0}
+  canFlies: 1
+  bestFliesMax: 0
+  bestFlies: {x: 0, y: 0, z: 0}
 --- !u!1 &6001152345118342166
 GameObject:
   m_ObjectHideFlags: 0
