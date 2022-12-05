@@ -64,15 +64,17 @@ public class CP_Boss2_Atacante : MonoBehaviour
     void CreateUS()
     {
         US_Boss2 = new UtilitySystemEngine(true);
+        /*
         Factor Cant_Vida = new LeafVariable(Vida, 1000, 0); //como pasar datos para los factor
         Factor Cant_Furia = new LeafVariable(Fury, 100, 0);
         Factor Cant_Torres = new LeafVariable(Towers, 10, 0);
         Factor Tiempo_Sin = new LeafVariable(TiempoFury, 30, 0);
+        
         Factor ImportanciaCurarse = new LinearCurve(Cant_Vida);
         Factor F_Rabia = new LinearCurve(Cant_Furia);
         Factor Tiempo_Sin_Rabia = new LinearCurve(Tiempo_Sin);
         Factor Daño_Pot = new ExpCurve(Cant_Torres);
-
+        
         // Factores rabia
         List<Factor> factores_R = new List<Factor>();
         factores_R.Add(F_Rabia); factores_R.Add(Tiempo_Sin_Rabia);
@@ -104,7 +106,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
         UtilityAction Area = US_Boss2.CreateUtilityAction("AOE", B2_Area, Ganas_Area);
         UtilityAction Finisher = US_Boss2.CreateUtilityAction("FIN", B2_Finisher, Ganas_Finisher);
         UtilityAction Nothing = US_Boss2.CreateUtilityAction("idle", B2_Idle, Daño_Pot);
-
+        */
     }
     float Vida ( float health)
     {
