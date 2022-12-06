@@ -238,16 +238,14 @@ MonoBehaviour:
   damage: 50
   range: 8
   speed: 3
-  hitRate: 3
-  furyRate: 5
+  hitRate: 1
+  hitRateTimer: 0
+  furyRate: 10
+  furyRateTimer: 0
+  minFury: 30
   fury: 0
   furyIncrement: 15
   furyIncrementTime: 1
-  minFury: 30
   curation: 250
-  towerInRangeCheck: 0
-  towerInRange: {fileID: 0}
-  towerInRangeRunCheck: 0
   towerInRangeRun: {fileID: 0}
-  wallInRangeCheck: 0
   wallInRange: {fileID: 0}
