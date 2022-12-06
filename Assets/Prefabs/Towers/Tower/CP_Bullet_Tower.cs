@@ -56,6 +56,18 @@ public class CP_Bullet_Tower : MonoBehaviour
 
                 target.gameObject.GetComponent<CP_EnemigoEnano>().health -= damage;
             }
+            if (target.gameObject.GetComponent<CP_Boss2_Atacante>())
+            {
+                if (target.gameObject.GetComponent<CP_Boss2_Atacante>().health <= damage)
+                {
+                    if (myTower)
+                    {
+                        myTower.kills++;
+                    }
+                }
+
+                target.gameObject.GetComponent<CP_Boss2_Atacante>().health -= damage;
+            }
 
             Destroy(gameObject);
             print("Ha golpeado");

@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetButtonDown("Fire3"))
         {
             //Instantiate(boss1, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
-            Instantiate(boss1, spawns[0].transform.position, transform.rotation);
+            Instantiate(boss2, spawns[0].transform.position, transform.rotation);
         }
     }
 }

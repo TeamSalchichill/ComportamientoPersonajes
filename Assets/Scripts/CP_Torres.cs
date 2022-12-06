@@ -100,7 +100,7 @@ public class CP_Torres : MonoBehaviour
 
     void T_atacando()
     {
-        print("Recargando");
+        //print("Recargando");
 
         if (fireRateTimer >= fireRate)
         {
