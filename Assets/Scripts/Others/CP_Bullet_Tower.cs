@@ -70,7 +70,7 @@ public class CP_Bullet_Tower : MonoBehaviour
             }
 
             Destroy(gameObject);
-            print("Ha golpeado");
+            print("Bala de torre: He golpeado");
             return;
         }
 

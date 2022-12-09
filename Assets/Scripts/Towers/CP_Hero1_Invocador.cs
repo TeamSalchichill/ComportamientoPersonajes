@@ -101,7 +101,7 @@ public class CP_Hero1_Invocador : MonoBehaviour
         // Detectar muerte
         if (health <= 0)
         {
-            print("Muere");
+            print("Hero 1 - Invocador: Me muero");
             Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
             Destroy(gameObject);
         }
@@ -143,11 +143,11 @@ public class CP_Hero1_Invocador : MonoBehaviour
 
     void accionIdle()
     {
-        print("Estoy en idle");
+        print("Hero 1 - Invocador: Estoy en idle");
     }
     void accionInvocar()
     {
-        print("invocar");
+        print("Hero 1 - Invocador: Invoco muro");
 
         RaycastHit[] groundTilesInRange = Physics.SphereCastAll(transform.position, range, transform.forward, 0, LayerMask.GetMask("Ground"));
         GameObject bestGroundTile = groundTilesInRange[0].collider.gameObject;
@@ -171,11 +171,9 @@ public class CP_Hero1_Invocador : MonoBehaviour
     }
     void accionAtacar()
     {
-        print("Recargando");
-
         if (fireRateTimer >= fireRate)
         {
-            print("Ataco");
+            print("Hero 1 - Invocador: Ataco");
             fireRateTimer = 0;
 
             anim.SetTrigger("doHit");

@@ -98,7 +98,7 @@ public class CP_EnemigoMediano : MonoBehaviour
 
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
         {
-            print("Llegué");
+            print("Enemigo mediano: He llegado a la torre principal");
             gameManager.numEnemiesMedium--;
             Destroy(gameObject);
         }
@@ -144,13 +144,13 @@ public class CP_EnemigoMediano : MonoBehaviour
 
     void EM_avanzar()
     {
-        print("avanzo");
+        print("Enemigo mediano: Avanzo a la torre principal");
         avanzar(Vector3.zero);
     }
 
     void EM_cambiar_camino()
     {
-        print("cambio camino");
+        print("Enemigo mediano: Voy a ayudar a un enemigo enano");
 
         if (gameManager.enemiesHelp.Count > 0)
         {
@@ -181,7 +181,7 @@ public class CP_EnemigoMediano : MonoBehaviour
     }
     void EM_atacar()
     {
-        print("ataco");
+        print("Enemigo mediano: Ataco");
         if (towerInRange)
         {
             avanzar(new Vector3(towerInRange.transform.position.x, 0, towerInRange.transform.position.z));
@@ -216,7 +216,7 @@ public class CP_EnemigoMediano : MonoBehaviour
     }
     void EM_morir()
     {
-        print("hasta luego");
+        print("Enemigo mediano: He muerto");
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.up), out hit, 1000, LayerMask.GetMask("Ground")))
@@ -235,7 +235,7 @@ public class CP_EnemigoMediano : MonoBehaviour
     //Método que hace que controla avance del enemigo
     void avanzar(Vector3 targetPos)
     {
-        print("voy camninando por la vida, sin pausa pero sin prisa");
+        print("Enemigo mediano: Avanzo hacia la torre principal");
         nav.SetDestination(new Vector3(targetPos.x, 0, targetPos.z));
 
         anim.SetBool("isWalk", true);

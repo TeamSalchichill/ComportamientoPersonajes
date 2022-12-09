@@ -54,7 +54,7 @@ public class CP_Bullet_BossFinal : MonoBehaviour
             }
 
             Destroy(gameObject);
-            print("Ha golpeado");
+            print("Bala de boss final: He golpeado");
             return;
         }
 

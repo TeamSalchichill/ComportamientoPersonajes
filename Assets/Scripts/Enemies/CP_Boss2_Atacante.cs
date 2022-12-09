@@ -124,7 +124,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
 
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
         {
-            print("Llegué");
+            print("Boss 2 - Atacante: He llegado a la torre principal");
             Destroy(gameObject);
         }
 
@@ -191,7 +191,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     }
     void B2_Morir()
     {
-        print("ME MUERO");
+        print("Boss 2 - Atacante: He muerto");
 
         if (myBossFinal)
         {
@@ -202,7 +202,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     }
     void B2_Avanzar()
     {
-        print("AVANZO");
+        print("Boss 2 - Atacante: Avanzo a la torre principal");
         nav.SetDestination(Vector3.zero);
         anim.SetBool("isHit", false);
     }
@@ -210,7 +210,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     {
         if (hitRateTimer >= hitRate)
         {
-            print("ATACO");
+            print("Boss 2 - Atacante: Ataco");
             hitRateTimer = 0;
             fury += furyIncrement;
             nav.SetDestination(new Vector3(towersInRange[0].transform.position.x, 0, towersInRange[0].transform.position.z));
@@ -237,7 +237,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     }
     void B2_Heal()
     {
-        print("ME CURO");
+        print("Boss 2 - Atacante: Me curo");
         furyRateTimer = 0;
         fury = 0;
         health += curation;
@@ -248,7 +248,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     }
     void B2_Area()
     {
-        print("AREO");
+        print("Boss 2 - Atacante: Ataco en área");
         furyRateTimer = 0;
         fury = 0;
 
@@ -275,7 +275,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
     {
         if (towersInRange[0])
         {
-            print("FINIQUITEO");
+            print("Boss 2 - Atacante: Lanzo ataque fuerte");
             furyRateTimer = 0;
             fury = 0;
 

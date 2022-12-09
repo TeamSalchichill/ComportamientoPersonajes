@@ -120,7 +120,7 @@ public class CP_Boss1_Invocador : MonoBehaviour
 
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
         {
-            print("Llegué");
+            print("Boss 1 - Invocador: He llegado a la torre principal");
 
             if (myBossFinal)
             {
@@ -265,36 +265,32 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Dead
     ReturnValues CheckHealth()
     {
-        print("Check Health");
+        print("Boss 1 - Invocador: Comprobando vida");
         if (health <= 0)
         {
-            print("Succeed Health");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("Fail Health");
             return ReturnValues.Failed;
         }
     }
     void Dead()
     {
-        print("Dead");
+        print("Boss 1 - Invocador: He muerto");
         Destroy(gameObject);
     }
 
     // Timer
     ReturnValues CheckTimer()
     {
-        print("Check Timer");
+        print("Boss 1 - Invocador: Comprobando el temporizador para lanzar habilidades");
         if (abilityRateTimer < abilityRate)
         {
-            print("Fail Timer");
             return ReturnValues.Failed;
         }
         else
         {
-            print("Succed Timer");
             abilityRateTimer = 0;
             return ReturnValues.Succeed;
         }
@@ -303,21 +299,19 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Main Tower
     ReturnValues CheckMainTowerDistance()
     {
-        print("Check Main Tower Distance");
+        print("Boss 1 - Invocador: Comprobando distancia hasta la torre principal");
         if (Vector3.Distance(transform.position, gameManager.mainTower.transform.position) > rangeDetectMainTower)
         {
-            print("Fail Main Tower Distance");
             return ReturnValues.Failed;
         }
         else
         {
-            print("Succed Main Tower Distance");
             return ReturnValues.Succeed;
         }
     }
     void RunMainTower()
     {
-        print("Run Main Tower");
+        print("Boss 1 - Invocador: Corriendo hacia la torre principal");
         nav.speed = speed * 4;
         anim.SetBool("isHit", false);
         anim.speed = 4;
@@ -326,22 +320,20 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Normal Tower
     ReturnValues CheckNormalTowerDistance()
     {
-        print("Check Tower Distance");
+        print("Boss 1 - Invocador: Comprobando la distancia a una torre normal");
         if (towerInRangeRun)
         {
-            print("Succed Tower Distance");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("Fail Tower Distance");
             return ReturnValues.Failed;
         }
         
     }
     void RunInvokeTower()
     {
-        print("Run Invoke Tower");
+        print("Boss 1 - Invocador: Corriendo hacia una torre normal");
         nav.speed = speed * 4;
         anim.SetBool("isHit", false);
         anim.speed = 4;
@@ -359,21 +351,19 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Store Max
     ReturnValues CheckStorageDistance()
     {
-        print("Check Store");
+        print("Boss 1 - Invocador: Comprobando el almacenamiento de enemigos enanos");
         if (numEnemiesStored < numEnemiesStoredMax)
         {
-            print("Fail Store");
             return ReturnValues.Failed;
         }
         else
         {
-            print("Succed Store");
             return ReturnValues.Succeed;
         }
     }
     void InvokeStore()
     {
-        print("Run Invoke Store");
+        print("Boss 1 - Invocador: Invocando enemigos enanos");
         anim.SetTrigger("doInvoke");
         StartCoroutine(SpawnEnemies(numEnemiesStored));
         numEnemiesStored = 0;
@@ -390,7 +380,7 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Final Store
     void StoreFinal()
     {
-        print("Enemies Storaged");
+        print("Boss 1 - Invocador: Almacenando enemigos enanos");
         numEnemiesStored += 2;
         numEnemiesStored = Mathf.Min(numEnemiesStored, numEnemiesStoredMax);
     }
@@ -398,57 +388,52 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Movement
     ReturnValues CheckStopTower()
     {
-        print("Check Stop Tower");
+        print("Boss 1 - Invocador: Comprobando si hay una torre en el camino");
         if (wallInRange)
         {
-            print("Succed Stop Tower");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("Fail Stop Tower");
             return ReturnValues.Failed;
         }
         
     }
     ReturnValues CheckStopMove()
     {
-        print("Check Stop Move");
+        print("Boss 1 - Invocador: Comprobando si estoy parado");
         if (nav.speed == 0)
         {
-            print("Fail Stop Move");
             return ReturnValues.Failed;
         }
         else
         {
-            print("Succed Stop Move");
             return ReturnValues.Succeed;
         }
     }
     void Stop()
     {
-        print("Stop");
+        print("Boss 1 - Invocador: Parando");
         nav.speed = 0;
     }
 
     // Attack
     ReturnValues CheckAttackTower()
     {
+        print("Boss 1 - Invocador: Comprobando si hay una torre en rango y si puedo atacar");
         if (towerInRange && hitRateTimer >= hitRate)
         {
-            print("Succed Attack Tower");
             hitRateTimer = 0;
             return ReturnValues.Succeed;
         }
         else
         {
-            print("Fail Attack Tower");
             return ReturnValues.Failed;
         }
     }
     void Attack()
     {
-        print("Attack");
+        print("Boss 1 - Invocador: Atacando");
 
         nav.SetDestination(new Vector3(towerInRange.transform.position.x, 0, towerInRange.transform.position.z));
 
@@ -475,21 +460,19 @@ public class CP_Boss1_Invocador : MonoBehaviour
     // Move
     ReturnValues CheckMoveTower()
     {
-        print("Check Move Tower");
+        print("Boss 1 - Invocador: Comprobando si hay una torre normal cerca");
         if (!towerInRange)
         {
-            print("Succed Move Tower");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("Fail Move Tower");
             return ReturnValues.Failed;
         }
     }
     void Move()
     {
-        print("Move");
+        print("Boss 1 - Invocador: Avanzando hacia la torre principal");
         if (nav.speed == 0)
         {
             nav.speed = speed;

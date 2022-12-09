@@ -319,13 +319,13 @@ public class CP_BossFinal : MonoBehaviour
 
     void Morir()
     {
-        print("He muerto");
+        print("Boss Final: He muerto");
         Destroy(gameObject);
     }
 
     void InvocarPM()
     {
-        print("He invocado enemigos pequeños y medianos");
+        print("Boss Final: He invocado enemigos pequeños y medianos");
         int delayTime;
         if (bestTower)
         {
@@ -364,7 +364,7 @@ public class CP_BossFinal : MonoBehaviour
 
     void InvocarBoss()
     {
-        print("He invocado Boss");
+        print("Boss Final: He invocado un boss");
         anim.SetTrigger("doInvoke");
         GameObject instBoss = Instantiate(bosses[Random.Range(0, bosses.Length)], new Vector3(transform.position.x, 0, transform.position.z) + (transform.forward * 2), transform.rotation);
         if (instBoss.GetComponent<CP_Boss1_Invocador>())
@@ -379,14 +379,14 @@ public class CP_BossFinal : MonoBehaviour
 
     void BolaDeFuego()
     {
-        print("He lanzado bola de fuego");
+        print("Boss Final: He lanzado una bola de fuego");
         anim.SetTrigger("doFireBall");
         Instantiate(fireBall, new Vector3(bestZoneFireBall.x, 25, bestZoneFireBall.z), transform.rotation);
     }
 
     void InhabilitarTorre()
     {
-        print("He inhabilitado torre");
+        print("Boss Final: He inhabilitado una torre");
         bestTowerAux = bestTower;
         bestTowerAux.GetComponent<CP_Torres>().fireRate += 100;
         instCross = Instantiate(crossDisable, new Vector3(bestTowerAux.transform.position.x, 5, bestTowerAux.transform.position.z), transform.rotation);
@@ -401,7 +401,7 @@ public class CP_BossFinal : MonoBehaviour
 
     void InvocarMoscas()
     {
-        print("He invocado moscas");
+        print("Boss Final: He invocado moscas");
         anim.SetTrigger("doInvoke");
         StartCoroutine(InvokeFlies());
     }
@@ -416,7 +416,7 @@ public class CP_BossFinal : MonoBehaviour
 
     void AumentarVelocidad()
     {
-        print("He aumentado velocidad");
+        print("Boss Final: He aumentado la velocidad de los enemigos");
         anim.SetTrigger("doBoostSpeed");
         foreach (var enemy in gameManager.enemies)
         {
@@ -454,7 +454,7 @@ public class CP_BossFinal : MonoBehaviour
 
     void Idle()
     {
-        print("Estoy en Idle");
+        print("Boss Final: Estoy en Idle");
     }
 
     private void OnMouseDown()

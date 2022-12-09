@@ -82,7 +82,7 @@ public class CP_EnemigoEnano : MonoBehaviour
 
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
         {
-            print("Llegué");
+            print("Enemigo enano: He llegado a la torre principal");
             Destroy(gameObject);
         }
 
@@ -158,7 +158,7 @@ public class CP_EnemigoEnano : MonoBehaviour
 
     void MorirA()
     {
-        print("Morir");
+        print("Enemigo enano: He muerto");
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.up), out hit, 1000, LayerMask.GetMask("Ground")))
@@ -174,7 +174,7 @@ public class CP_EnemigoEnano : MonoBehaviour
     }
     void AtacarA()
     {
-        print("Atacar");
+        print("Enemigo enano: Ataco");
         if (towerInRange)
         {
             nav.SetDestination(towerInRange.transform.position);
@@ -197,7 +197,7 @@ public class CP_EnemigoEnano : MonoBehaviour
     {
         if (!enemyMedium)
         {
-            print("Avanzar");
+            print("Enemigo enano: Avanzo a la torre principal");
             nav.SetDestination(Vector3.zero);
             nav.speed = speed;
 
@@ -207,13 +207,13 @@ public class CP_EnemigoEnano : MonoBehaviour
     }
     void PararA()
     {
-        print("Reculando");
+        print("Enemigo enano: Reculando, he encontrado peligro");
         nav.SetDestination(spawnPos);
         Invoke("Stop", 2);
     }
     void Stop()
     {
-        print("Parar");
+        print("Enemigo enano: Esperando a un enemigo mediano");
         anim.SetBool("isWalk", false);
         anim.SetBool("isHit", false);
         nav.speed = 0;
@@ -229,15 +229,14 @@ public class CP_EnemigoEnano : MonoBehaviour
     }
     ReturnValues VidaActual()
     {
-        print("ComprobandoVida");
+
+        print("Enemigo enano: Comprobando vida");
         if (health <= 0)
         {
-            print("Vida == 0");
             return ReturnValues.Failed;
         }
         else
         {
-            print("Vida > 0");
             return ReturnValues.Succeed;
         }
     }

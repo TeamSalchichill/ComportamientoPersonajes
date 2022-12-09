@@ -213,17 +213,17 @@ public class CP_Hero2_Healer : MonoBehaviour
 
     void circuloAmarillo()
     {
-        //print("soy una bola amarilla, es decir una pregunta ");
+
     }
     void Morir()
     {
         Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
-        print("estoy muerto");
+        print("Hero 2 - Sanadora: Me muero");
         Destroy(gameObject);
     }
     void Aumentar()
     {
-        print("aumento velocidad");
+        print("Hero 2 - Sanadora: Aumento la velocidad de disparo de una torre");
         fireRateBoostRateTimer = 0;
         towerInRangeBoost.GetComponent<CP_Torres>().fireRate *= fireRateBoost;
 
@@ -233,7 +233,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     void Paralizar()
     {
-        print("paralizo");
+        print("Hero 2 - Sanadora: Paralizo a un boss");
 
         paralizeRateTimer = 0;
 
@@ -260,33 +260,10 @@ public class CP_Hero2_Healer : MonoBehaviour
 
         Instantiate(particleParalize, bossToParalizeAux.transform.position + new Vector3(0, 3, 0), transform.rotation);
         Instantiate(particleParalize, transform.position + new Vector3(0, 3, 0), transform.rotation);
-
-        //Invoke("DisableParalize", 5);
     }
-    /*
-    void DisableParalize()
-    {
-        if (bossToParalizeAux.GetComponent<CP_Boss1_Invocador>())
-        {
-            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().nav.speed = 2;
-            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().hitRate -= 1000;
-            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().abilityRate -= 1000;
-            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().anim.speed = 1;
-        }
-        if (bossToParalizeAux.GetComponent<CP_Boss2_Atacante>())
-        {
-            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().nav.speed = 2;
-            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().hitRate -= 1000;
-            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().furyRate -= 1000;
-            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().anim.speed = 1;
-        }
-    }
-    */
     void Atacar()
     {
-        print("Recargando");
-
-        print("Ataco");
+        print("Hero 2 - Sanadora: Ataco");
         fireRateTimer = 0;
 
         GameObject instBullet = Instantiate(bullet, bulletPos.transform.position, transform.rotation);
@@ -298,7 +275,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     {
         if (curationRateTimer >= curationRate)
         {
-            print("curar");
+            print("Hero 2 - Sanadora: Curo a una torre");
             curationRateTimer = 0;
             towerInRangeCuration.GetComponent<CP_Torres>().health += curation;
 
@@ -309,7 +286,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     void Idle()
     {
-        print("estoy en idle");
+        print("Hero 2 - Sanadora: Estoy en idle");
     }
     ReturnValues alwaysSuccedeed()
     {
@@ -323,7 +300,7 @@ public class CP_Hero2_Healer : MonoBehaviour
         }
         else
         {
-            print("mi vida es:" + health);
+            print("Hero 2 - Sanadora: Mi vida es: " + health);
             return ReturnValues.Failed;
         }
     }
@@ -331,12 +308,12 @@ public class CP_Hero2_Healer : MonoBehaviour
     {
         if (fireRateBoostRateTimer >= fireRateBoostRate)
         {
-            print("puedo aumentar");
+            print("Hero 2 - Sanadora: Puedo aumentar velocidad de ataque de una torre");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("no puedo aumentar");
+            print("Hero 2 - Sanadora: No puedo aumentar velocidad de ataque de una torre");
             return ReturnValues.Failed;
         }
     }
@@ -344,12 +321,12 @@ public class CP_Hero2_Healer : MonoBehaviour
     {
         if (enemyInRange && fireRateTimer >= fireRate)
         {
-            print("hay enemigos");
+            print("Hero 2 - Sanadora: Hay enemigos cerca");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("no hay enemigos");
+            print("Hero 2 - Sanadora: No hay enemigos cerca");
             return ReturnValues.Failed;
         }
     }
@@ -357,12 +334,12 @@ public class CP_Hero2_Healer : MonoBehaviour
     {
         if (health < healthMax && bossToParalize && paralizeRateTimer >= paralizeRate)
         {
-            print("me han golpeado");
+            print("Hero 2 - Sanadora: Me ha golpeado un boss");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("no me han golpeado");
+            print("Hero 2 - Sanadora: No me ha golpeado un boss");
             return ReturnValues.Failed;
         }
     }
@@ -375,12 +352,12 @@ public class CP_Hero2_Healer : MonoBehaviour
 
         if (towerInRangeCuration && enemiesInRange.Count == 0)
         {
-            print("hay torre dañada");
+            print("Hero 2 - Sanadora: Hay una torre dañada");
             return ReturnValues.Succeed;
         }
         else
         {
-            print("No hay torre dañada");
+            print("Hero 2 - Sanadora: No hay una torre dañada");
             return ReturnValues.Failed;
         }
     }

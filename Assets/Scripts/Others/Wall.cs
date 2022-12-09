@@ -12,6 +12,7 @@ public class Wall : MonoBehaviour
     {
         if (health <= 0)
         {
+            print("Muro: Me muero");
             myHero.wallAlive = false;
             Destroy(gameObject);
         }

@@ -107,11 +107,9 @@ public class CP_Torres : MonoBehaviour
 
     void T_atacando()
     {
-        //print("Recargando");
-
         if (fireRateTimer >= fireRate)
         {
-            print("Ataco");
+            print("Torre normal: Ataco");
             fireRateTimer = 0;
 
             GameObject instBullet = Instantiate(bullet, bulletPos.transform.position, transform.rotation);
@@ -122,12 +120,12 @@ public class CP_Torres : MonoBehaviour
 
     void T_no_atacando()
     {
-        print("No ataco");
+        print("Torre normal: No ataco");
     }
 
     void T_muerte()
     {
-        print("Hasta luego");
+        print("Torre normal: Me muero");
         Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
         Destroy(gameObject);
     }
