@@ -6,6 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    int towerSelected;
+    bool canColocate;
+    bool canBossFinal = true;
+
     [Header("External GameObjects")]
     public GameObject mainTower;
     public GameObject[] spawns;
@@ -37,24 +41,32 @@ public class GameManager : MonoBehaviour
     {
         towers = GameObject.FindGameObjectsWithTag("Tower");
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        /*
-        if (Input.GetButtonDown("Fire1"))
+
+        if ((Input.GetButtonDown("Fire1") || Input.GetButton("Fire1")) && canColocate)
         {
-            //Instantiate(enemyMedium, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
-            Instantiate(enemyMedium, new Vector3(spawns[0].transform.position.x, 0, spawns[0].transform.position.z), transform.rotation);
-            numEnemiesMedium++;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayHit;
+            if (Physics.Raycast(ray, out rayHit, 1000))
+            {
+                if (rayHit.collider.gameObject.layer == 10)
+                {
+                    canColocate = false;
+
+                    switch (towerSelected)
+                    {
+                        case 0:
+                            Instantiate(tower, rayHit.collider.gameObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                            break;
+                        case 1:
+                            Instantiate(hero1, rayHit.collider.gameObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                            break;
+                        case 2:
+                            Instantiate(hero2, rayHit.collider.gameObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                            break;
+                    }
+                }
+            }
         }
-        if (Input.GetButtonDown("Fire2"))
-        {
-            //Instantiate(enemySmall, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
-            Instantiate(enemySmall, new Vector3(spawns[0].transform.position.x, 0, spawns[0].transform.position.z), transform.rotation);
-        }
-        if (Input.GetButtonDown("Fire3"))
-        {
-            //Instantiate(boss1, spawns[Random.Range(0, spawns.Length - 1)].transform.position, transform.rotation);
-            Instantiate(boss1, new Vector3(spawns[0].transform.position.x, 0, spawns[0].transform.position.z), transform.rotation);
-        }
-        */
     }
 
     public void InvokeEnemySmall()
@@ -84,9 +96,19 @@ public class GameManager : MonoBehaviour
     }
     public void InvokeBossFinal()
     {
-        int randomID = 0;
-        Vector3 localSpawn = new Vector3(spawns[randomID].transform.position.x, 0, spawns[randomID].transform.position.z);
-        GameObject instBossFinal = Instantiate(bossFinal, localSpawn, transform.rotation);
-        instBossFinal.transform.rotation = Quaternion.AngleAxis(270, Vector3.up);
+        if (canBossFinal)
+        {
+            canBossFinal = false;
+            int randomID = 0;
+            Vector3 localSpawn = new Vector3(spawns[randomID].transform.position.x, 0, spawns[randomID].transform.position.z);
+            GameObject instBossFinal = Instantiate(bossFinal, localSpawn, transform.rotation);
+            instBossFinal.transform.rotation = Quaternion.AngleAxis(270, Vector3.up);
+        }
+    }
+
+    public void SelectTower(int id)
+    {
+        canColocate = true;
+        towerSelected = id;
     }
 }

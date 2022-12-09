@@ -13,6 +13,9 @@ public class CP_EnemigoEnano : MonoBehaviour
     public NavMeshAgent nav;
     Animator anim;
 
+    [Header("External GameObjects")]
+    public GameObject alert;
+
     [Header("Stats")]
     public int health;
     public int range;
@@ -53,8 +56,12 @@ public class CP_EnemigoEnano : MonoBehaviour
     void Update()
     {
         hitRateTimer += Time.deltaTime;
+
+        alert.SetActive(enemyMedium);
+
         if (!enemyMedium)
         {
+            nav.SetDestination(Vector3.zero);
             scareRateTimer += Time.deltaTime;
         }
 

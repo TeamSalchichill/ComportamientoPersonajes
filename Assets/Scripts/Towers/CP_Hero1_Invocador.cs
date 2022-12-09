@@ -34,6 +34,9 @@ public class CP_Hero1_Invocador : MonoBehaviour
     public bool enemyInRangeCheck;
     public GameObject enemyInRange;
 
+    [Header("Particles")]
+    public GameObject particleDestruction;
+
     void Start()
     {
         gameManager = GameManager.instance;
@@ -87,6 +90,10 @@ public class CP_Hero1_Invocador : MonoBehaviour
                     {
                         enemiesHealth += enemy.GetComponent<CP_Boss1_Invocador>().health;
                     }
+                    if (enemy.GetComponent<CP_Boss2_Atacante>())
+                    {
+                        enemiesHealth += enemy.GetComponent<CP_Boss2_Atacante>().health;
+                    }
                 }
             }
         }
@@ -95,6 +102,7 @@ public class CP_Hero1_Invocador : MonoBehaviour
         if (health <= 0)
         {
             print("Muere");
+            Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
             Destroy(gameObject);
         }
 
@@ -156,7 +164,7 @@ public class CP_Hero1_Invocador : MonoBehaviour
             }
         }
 
-        GameObject instWall = Instantiate(wall, bestGroundTile.transform.position, transform.rotation);
+        GameObject instWall = Instantiate(wall, bestGroundTile.transform.position, Quaternion.identity);
         instWall.GetComponent<Wall>().myHero = this;
         wallRateTimer = 0;
         wallAlive = true;

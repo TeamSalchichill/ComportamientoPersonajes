@@ -502,6 +502,7 @@ MonoBehaviour:
   numEnemiesNear: 0
   enemyInRangeCheck: 0
   enemyInRange: {fileID: 0}
+  particleDestruction: {fileID: 1892078723244562, guid: 7da3d235ba793ea4096b6f85b272b3f2, type: 3}
 --- !u!1 &3692400773494891700
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,9 @@ public class CP_EnemigoMediano : MonoBehaviour
     public NavMeshAgent nav;
     Animator anim;
 
+    [Header("External GameObjects")]
+    public GameObject flag;
+
     [Header("Stats")]
     public int health;
     public int damage;
@@ -52,6 +55,8 @@ public class CP_EnemigoMediano : MonoBehaviour
     {
         hitRateTimer += Time.deltaTime;
 
+        flag.SetActive(enemySmall);
+
         towerInRangeCheck = false;
         towerInRange = null;
         float minDistance = Mathf.Infinity;
@@ -85,6 +90,10 @@ public class CP_EnemigoMediano : MonoBehaviour
                 enemySmall = null;
                 nav.SetDestination(Vector3.zero);
             }
+        }
+        else
+        {
+            nav.SetDestination(Vector3.zero);
         }
 
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
@@ -147,15 +156,26 @@ public class CP_EnemigoMediano : MonoBehaviour
         {
             GameObject enemyHelp = gameManager.enemiesHelp[0];
 
-            if (!enemyHelp.GetComponent<CP_EnemigoEnano>().enemyMedium)
+            if (enemyHelp)
             {
-                gameManager.enemiesHelp.Remove(enemyHelp);
+                if (!enemyHelp.GetComponent<CP_EnemigoEnano>().enemyMedium)
+                {
+                    gameManager.enemiesHelp.Remove(enemyHelp);
 
-                enemySmall = enemyHelp;
-                enemyHelp.GetComponent<CP_EnemigoEnano>().enemyMedium = gameObject;
-                enemySmallPos = enemySmall.transform.position;
+                    enemySmall = enemyHelp;
+                    enemyHelp.GetComponent<CP_EnemigoEnano>().enemyMedium = gameObject;
+                    enemySmallPos = enemySmall.transform.position;
 
-                avanzar(enemySmallPos);
+                    avanzar(enemySmallPos);
+                }
+                else
+                {
+                    avanzar(Vector3.zero);
+                }
+            }
+            else
+            {
+                avanzar(Vector3.zero);
             }
         }
     }

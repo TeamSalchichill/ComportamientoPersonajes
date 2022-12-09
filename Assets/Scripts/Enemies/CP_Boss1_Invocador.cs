@@ -11,10 +11,11 @@ public class CP_Boss1_Invocador : MonoBehaviour
 
     [Header("Components")]
     public NavMeshAgent nav;
-    Animator anim;
+    public Animator anim;
 
     [Header("External GameObjects")]
     public GameObject enemyToInvoke;
+    public CP_BossFinal myBossFinal;
 
     [Header("Stats")]
     public int health;
@@ -120,7 +121,12 @@ public class CP_Boss1_Invocador : MonoBehaviour
         if (Vector3.Distance(transform.position, Vector3.zero) < 3)
         {
             print("Llegué");
-            gameManager.numEnemiesMedium--;
+
+            if (myBossFinal)
+            {
+                myBossFinal.health -= 100;
+            }
+
             Destroy(gameObject);
         }
 
@@ -458,6 +464,10 @@ public class CP_Boss1_Invocador : MonoBehaviour
         {
             towerInRange.GetComponent<CP_Hero2_Healer>().health -= damage;
         }
+        if (towerInRange.GetComponent<Wall>())
+        {
+            towerInRange.GetComponent<Wall>().health -= damage;
+        }
 
         anim.SetBool("isHit", true);
     }
@@ -487,5 +497,17 @@ public class CP_Boss1_Invocador : MonoBehaviour
         nav.SetDestination(Vector3.zero);
 
         anim.SetBool("isHit", false);
+    }
+
+    public void DisableParalizePublic()
+    {
+        Invoke("DisableParalize", 5);
+    }
+    void DisableParalize()
+    {
+        nav.speed = 2;
+        hitRate -= 1000;
+        abilityRate -= 1000;
+        anim.speed = 1;
     }
 }

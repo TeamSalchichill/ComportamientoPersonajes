@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 70
-  damage: 1
+  damage: 25
   myTower: {fileID: 0}
 --- !u!1 &6959218534469739254
 GameObject:

@@ -32,7 +32,10 @@ public class CP_Hero2_Healer : MonoBehaviour
     public float fireRateBoostRate;
     float fireRateBoostRateTimer;
     [Space]
+    public float paralizeRate;
+    public float paralizeRateTimer;
     public GameObject bossToParalize;
+    public GameObject bossToParalizeAux;
 
     [Header("Checks variables")]
     public bool enemyInRangeCheck;
@@ -47,6 +50,8 @@ public class CP_Hero2_Healer : MonoBehaviour
     [Header("Particles")]
     public GameObject particleBoost;
     public GameObject particleCuration;
+    public GameObject particleParalize;
+    public GameObject particleDestruction;
 
     void Start()
     {
@@ -59,6 +64,7 @@ public class CP_Hero2_Healer : MonoBehaviour
         fireRateTimer = fireRate;
         curationRateTimer = curationRate;
         fireRateBoostRateTimer = fireRateBoostRate;
+        paralizeRateTimer = paralizeRate;
 
         CreateBT();
     }
@@ -67,6 +73,7 @@ public class CP_Hero2_Healer : MonoBehaviour
         fireRateTimer += Time.deltaTime;
         curationRateTimer += Time.deltaTime;
         fireRateBoostRateTimer += Time.deltaTime;
+        paralizeRateTimer += Time.deltaTime;
 
         enemyInRangeCheck = false;
         enemyInRange = null;
@@ -106,23 +113,26 @@ public class CP_Hero2_Healer : MonoBehaviour
         int numMaxHealth = 1000000;
         foreach (GameObject tower in gameManager.towers)
         {
-            if (Vector3.Distance(transform.position, tower.transform.position) < range)
+            if (tower)
             {
-                if (tower.GetComponent<CP_Torres>())
+                if (Vector3.Distance(transform.position, tower.transform.position) < range)
                 {
-                    if (numMaxKills <= tower.GetComponent<CP_Torres>().kills)
+                    if (tower.GetComponent<CP_Torres>())
                     {
-                        numMaxKills = tower.GetComponent<CP_Torres>().kills;
+                        if (numMaxKills <= tower.GetComponent<CP_Torres>().kills)
+                        {
+                            numMaxKills = tower.GetComponent<CP_Torres>().kills;
 
-                        towerInRangeBoostCheck = true;
-                        towerInRangeBoost = tower;
-                    }
-                    if (numMaxHealth >= tower.GetComponent<CP_Torres>().health && tower.GetComponent<CP_Torres>().health < tower.GetComponent<CP_Torres>().healthMax)
-                    {
-                        numMaxHealth = tower.GetComponent<CP_Torres>().health;
+                            towerInRangeBoostCheck = true;
+                            towerInRangeBoost = tower;
+                        }
+                        if (numMaxHealth >= tower.GetComponent<CP_Torres>().health && tower.GetComponent<CP_Torres>().health < tower.GetComponent<CP_Torres>().healthMax)
+                        {
+                            numMaxHealth = tower.GetComponent<CP_Torres>().health;
 
-                        towerInRangeCurationCheck = true;
-                        towerInRangeCuration = tower;
+                            towerInRangeCurationCheck = true;
+                            towerInRangeCuration = tower;
+                        }
                     }
                 }
             }
@@ -207,6 +217,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     void Morir()
     {
+        Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
         print("estoy muerto");
         Destroy(gameObject);
     }
@@ -217,13 +228,60 @@ public class CP_Hero2_Healer : MonoBehaviour
         towerInRangeBoost.GetComponent<CP_Torres>().fireRate *= fireRateBoost;
 
         anim.SetTrigger("doHit");
-        Instantiate(particleBoost, towerInRangeBoost.transform.position, transform.rotation);
+        Instantiate(particleBoost, towerInRangeBoost.transform.position + new Vector3(0, 3, 0), transform.rotation);
+        Instantiate(particleBoost, transform.position + new Vector3(0, 3, 0), transform.rotation);
     }
     void Paralizar()
     {
         print("paralizo");
 
+        paralizeRateTimer = 0;
+
+        bossToParalizeAux = bossToParalize;
+
+        if (bossToParalizeAux.GetComponent<CP_Boss1_Invocador>())
+        {
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().nav.speed = 0;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().hitRate += 1000;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().abilityRate += 1000;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().anim.speed = 0;
+
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().DisableParalizePublic();
+        }
+        if (bossToParalizeAux.GetComponent<CP_Boss2_Atacante>())
+        {
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().nav.speed = 0;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().hitRate += 1000;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().furyRate += 1000;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().anim.speed = 0;
+
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().DisableParalizePublic();
+        }
+
+        Instantiate(particleParalize, bossToParalizeAux.transform.position + new Vector3(0, 3, 0), transform.rotation);
+        Instantiate(particleParalize, transform.position + new Vector3(0, 3, 0), transform.rotation);
+
+        //Invoke("DisableParalize", 5);
     }
+    /*
+    void DisableParalize()
+    {
+        if (bossToParalizeAux.GetComponent<CP_Boss1_Invocador>())
+        {
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().nav.speed = 2;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().hitRate -= 1000;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().abilityRate -= 1000;
+            bossToParalizeAux.GetComponent<CP_Boss1_Invocador>().anim.speed = 1;
+        }
+        if (bossToParalizeAux.GetComponent<CP_Boss2_Atacante>())
+        {
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().nav.speed = 2;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().hitRate -= 1000;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().furyRate -= 1000;
+            bossToParalizeAux.GetComponent<CP_Boss2_Atacante>().anim.speed = 1;
+        }
+    }
+    */
     void Atacar()
     {
         print("Recargando");
@@ -245,7 +303,8 @@ public class CP_Hero2_Healer : MonoBehaviour
             towerInRangeCuration.GetComponent<CP_Torres>().health += curation;
 
             anim.SetTrigger("doHit");
-            Instantiate(particleCuration, transform.position, transform.rotation);
+            Instantiate(particleCuration, towerInRangeCuration.transform.position + new Vector3(0, 3, 0), transform.rotation);
+            Instantiate(particleCuration, transform.position + new Vector3(0, 3, 0), transform.rotation);
         }
     }
     void Idle()
@@ -296,7 +355,7 @@ public class CP_Hero2_Healer : MonoBehaviour
     }
     ReturnValues ComprobarGolpe()
     {
-        if (health < healthMax && bossToParalize)
+        if (health < healthMax && bossToParalize && paralizeRateTimer >= paralizeRate)
         {
             print("me han golpeado");
             return ReturnValues.Succeed;

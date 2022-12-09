@@ -830,11 +830,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
+  anim: {fileID: 0}
   enemyToInvoke: {fileID: 9033633079111053146, guid: 04556ca0f2aae9a4584b1b4f82f6fccf, type: 3}
-  health: 20000
+  myBossFinal: {fileID: 0}
+  health: 750
   damage: 50
   range: 8
-  speed: 3
+  speed: 1
   abilityRate: 5
   hitRate: 2
   rangeDetectMainTower: 30

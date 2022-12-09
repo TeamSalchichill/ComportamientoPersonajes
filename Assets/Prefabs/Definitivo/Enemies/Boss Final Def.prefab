@@ -666,6 +666,7 @@ MonoBehaviour:
   canFlies: 1
   bestFliesMax: 0
   bestFlies: {x: 0, y: 0, z: 0}
+  particleBoost: {fileID: 100002, guid: 6fd8a5f2e06eeba48a420e4ae1d36c38, type: 3}
 --- !u!95 &3856980294776564402
 Animator:
   serializedVersion: 4

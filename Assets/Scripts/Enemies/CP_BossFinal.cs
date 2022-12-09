@@ -57,6 +57,9 @@ public class CP_BossFinal : MonoBehaviour
 
     GameObject bestTowerAux;
 
+    [Header("Particles")]
+    public GameObject particleBoost;
+
     void Start()
     {
         gameManager = GameManager.instance;
@@ -363,8 +366,15 @@ public class CP_BossFinal : MonoBehaviour
     {
         print("He invocado Boss");
         anim.SetTrigger("doInvoke");
-        //Instantiate(bosses[Random.Range(0, bosses.Length)], new Vector3(transform.position.x, 0, transform.position.z) + (transform.forward * 2), transform.rotation);
-        Instantiate(bosses[0], new Vector3(transform.position.x, 0, transform.position.z) + (transform.forward * 2), transform.rotation);
+        GameObject instBoss = Instantiate(bosses[Random.Range(0, bosses.Length)], new Vector3(transform.position.x, 0, transform.position.z) + (transform.forward * 2), transform.rotation);
+        if (instBoss.GetComponent<CP_Boss1_Invocador>())
+        {
+            instBoss.GetComponent<CP_Boss1_Invocador>().myBossFinal = this;
+        }
+        if (instBoss.GetComponent<CP_Boss1_Invocador>())
+        {
+            instBoss.GetComponent<CP_Boss1_Invocador>().myBossFinal = this;
+        }
     }
 
     void BolaDeFuego()
@@ -423,6 +433,8 @@ public class CP_BossFinal : MonoBehaviour
                 enemy.GetComponent<CP_Boss1_Invocador>().nav.speed += 2;
             }
         }
+
+        Instantiate(particleBoost, transform.position + new Vector3(0, 3, 0), transform.rotation);
         Invoke("NerfSpeed", 5);
     }
     void NerfSpeed()

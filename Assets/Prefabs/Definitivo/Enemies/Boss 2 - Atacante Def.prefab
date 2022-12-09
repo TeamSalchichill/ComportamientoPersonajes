@@ -282,9 +282,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c44f91926d05f458a5028e2ac97c1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myBossFinal: {fileID: 0}
   nav: {fileID: 0}
-  health: 1000
-  healthMax: 1000
+  anim: {fileID: 0}
+  health: 750
+  healthMax: 750
   damage: 50
   range: 6
   speed: 3
@@ -299,6 +301,8 @@ MonoBehaviour:
   curation: 250
   towerInRangeRun: {fileID: 0}
   wallInRange: {fileID: 0}
+  particleCuration: {fileID: 1545806602296978, guid: e54218a21f4db50489a290ecf98b6cd7, type: 3}
+  particleAoE: {fileID: 100000, guid: c984e4521b5329840be5a38b2f5b0bd0, type: 3}
 --- !u!95 &-1253943885350197191
 Animator:
   serializedVersion: 4

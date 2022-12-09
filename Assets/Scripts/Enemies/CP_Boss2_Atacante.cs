@@ -10,10 +10,11 @@ public class CP_Boss2_Atacante : MonoBehaviour
     UtilitySystemEngine US_Boss2;
 
     GameManager gameManager;
+    public CP_BossFinal myBossFinal;
 
     [Header("Components")]
     public NavMeshAgent nav;
-    Animator anim;
+    public Animator anim;
 
     [Header("Stats")]
     public int health;
@@ -38,6 +39,10 @@ public class CP_Boss2_Atacante : MonoBehaviour
     public GameObject towerInRangeRun;
     public GameObject wallInRange;
     List<GameObject> towersInRange;
+
+    [Header("Particles")]
+    public GameObject particleCuration;
+    public GameObject particleAoE;
 
     void Start()
     {
@@ -187,6 +192,12 @@ public class CP_Boss2_Atacante : MonoBehaviour
     void B2_Morir()
     {
         print("ME MUERO");
+
+        if (myBossFinal)
+        {
+            myBossFinal.health -= 100;
+        }
+
         Destroy(gameObject);
     }
     void B2_Avanzar()
@@ -216,6 +227,10 @@ public class CP_Boss2_Atacante : MonoBehaviour
             {
                 towersInRange[0].GetComponent<CP_Hero2_Healer>().health -= damage;
             }
+            if (towersInRange[0].GetComponent<Wall>())
+            {
+                towersInRange[0].GetComponent<Wall>().health -= damage;
+            }
 
             anim.SetBool("isHit", true);
         }
@@ -228,6 +243,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
         health += curation;
         health = Mathf.Min(health, healthMax);
 
+        Instantiate(particleCuration, transform.position + new Vector3(0, 3, 0), transform.rotation);
         anim.SetTrigger("doCuration");
     }
     void B2_Area()
@@ -252,6 +268,7 @@ public class CP_Boss2_Atacante : MonoBehaviour
             }
         }
 
+        Instantiate(particleAoE, transform.position + new Vector3(0, 3, 0), transform.rotation);
         anim.SetTrigger("doAoE");
     }
     void B2_Finisher()
@@ -279,5 +296,17 @@ public class CP_Boss2_Atacante : MonoBehaviour
 
             anim.SetTrigger("doFinish");
         }
+    }
+
+    public void DisableParalizePublic()
+    {
+        Invoke("DisableParalize", 5);
+    }
+    void DisableParalize()
+    {
+        nav.speed = 2;
+        hitRate -= 1000;
+        furyRate -= 1000;
+        anim.speed = 1;
     }
 }

@@ -1117,6 +1117,7 @@ GameObject:
   - component: {fileID: 2959543779575279833}
   - component: {fileID: 6786827965204691748}
   - component: {fileID: 2959747086626580373}
+  - component: {fileID: -8767157013813092835}
   m_Layer: 7
   m_Name: Hero 2 - Healer Def
   m_TagString: Tower
@@ -1177,15 +1178,40 @@ MonoBehaviour:
   curationRate: 5
   fireRateBoost: 0.5
   fireRateBoostRate: 7
+  paralizeRate: 9
+  paralizeRateTimer: 0
   bossToParalize: {fileID: 0}
+  bossToParalizeAux: {fileID: 0}
   enemyInRangeCheck: 0
   enemyInRange: {fileID: 0}
   towerInRangeBoostCheck: 0
   towerInRangeBoost: {fileID: 0}
   towerInRangeCurationCheck: 0
   towerInRangeCuration: {fileID: 0}
-  particleBoost: {fileID: 0}
-  particleCuration: {fileID: 0}
+  particleBoost: {fileID: 1750940742320366, guid: f49773c97946dde4fa492b1c699b2dda, type: 3}
+  particleCuration: {fileID: 1545806602296978, guid: e54218a21f4db50489a290ecf98b6cd7, type: 3}
+  particleParalize: {fileID: 100000, guid: 517dea930d36c02479ecad7428eb6816, type: 3}
+  particleDestruction: {fileID: 1892078723244562, guid: 7da3d235ba793ea4096b6f85b272b3f2, type: 3}
+--- !u!95 &-8767157013813092835
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2475213771148978787}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 654f932d96b676845a06873f37657c7f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2686077178022703397
 GameObject:
   m_ObjectHideFlags: 0

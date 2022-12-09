@@ -29,6 +29,9 @@ public class CP_Torres : MonoBehaviour
     public bool enemyInRangeCheck;
     public GameObject enemyInRange;
 
+    [Header("Particles")]
+    public GameObject particleDestruction;
+
     void Start()
     {
         gameManager = GameManager.instance;
@@ -125,6 +128,7 @@ public class CP_Torres : MonoBehaviour
     void T_muerte()
     {
         print("Hasta luego");
+        Instantiate(particleDestruction, transform.position + new Vector3(0, 3, 0), transform.rotation);
         Destroy(gameObject);
     }
 
