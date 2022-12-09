@@ -139,4 +139,19 @@ public class CP_Torres : MonoBehaviour
             health -= 250;
         }
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Torre \n" +
+            "Vida: " + health + "\n" + 
+            "Rango: " + range + "\n" + 
+            "Daño: " + damage + "\n" + 
+            "Velocidad de disparo: " + fireRate + "\n" + 
+            "Muertes: " + kills + "\n" + 
+            "Enemigos cerca: " + numEnemiesNear + "\n" + 
+            "Torres cerca: " + numTowerNear + "\n"
+            ;
+    }
 }

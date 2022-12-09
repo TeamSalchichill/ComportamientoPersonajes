@@ -241,5 +241,18 @@ public class CP_EnemigoMediano : MonoBehaviour
         anim.SetBool("isWalk", true);
         anim.SetBool("isHit", false);
     }
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Vida: " + health + "\n" +
+            "Rango detección: " + rangeDetect + "\n" +
+            "Rango ataque: " + rangeAttack + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad de movimiento: " + speed + "\n" +
+            "Velocidad de ataque: " + hitRate + "\n" +
+            "Posición del personaje: " + enemySmallPos + "\n"
+        ;
+    }
 }
 

@@ -309,4 +309,24 @@ public class CP_Boss2_Atacante : MonoBehaviour
         furyRate -= 1000;
         anim.speed = 1;
     }
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Boss 2 - Atacante \n" + 
+            "Vida: " + health + "\n" +
+            "Vida máxima: " + healthMax + "\n" +
+            "Rango: " + range + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad de movimiento: " + speed + "\n" +
+            "Velocidad de ataque: " + hitRate + "\n" +
+            "Tiempo para poder usar la furia: " + furyRate + "\n" +
+            "Tiempo para poder usar la furia (Temporizador): " + furyRateTimer + "\n" +
+            "Cantidad de furia: " + fury + "\n" +
+            "Incremento de furia: " + furyIncrement + "\n" +
+            "Incremento de furia (Temporizador): " + furyIncrementTime + "\n" +
+            "Curación: " + curation + "\n"
+        ;
+    }
+
 }

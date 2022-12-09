@@ -510,4 +510,21 @@ public class CP_Boss1_Invocador : MonoBehaviour
         abilityRate -= 1000;
         anim.speed = 1;
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Boss 1 - Invocador \n" +
+            "Vida: " + health + "\n" +
+            "Rango: " + range + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad de movimiento: " + speed + "\n" +
+            "Velocidad de ataque: " + hitRate + "\n" +
+            "Rango detección torre principal: " + rangeDetectMainTower + "\n" +
+            "Rango detección torretas: " + rangeDetectTower + "\n" +
+            "Número personajes almacenados " + numEnemiesStored + "\n" +
+            "Número personajes máximos de almacenamiento " + numEnemiesStoredMax + "\n"
+        ;
+    }
 }

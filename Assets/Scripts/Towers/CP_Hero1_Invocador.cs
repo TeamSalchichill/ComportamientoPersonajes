@@ -192,4 +192,18 @@ public class CP_Hero1_Invocador : MonoBehaviour
             health -= 250;
         }
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Héroe 1 - Invocador \n" +
+            "Vida: " + health + "\n" +
+            "Rango: " + range + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad de disparo: " + fireRate + "\n" +
+            "Vida enemigos cerca: " + enemiesHealth + "\n" +
+            "Enfriamiento muro: " + wallRate + "\n"
+            ;
+    }
 }

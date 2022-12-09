@@ -392,4 +392,20 @@ public class CP_Hero2_Healer : MonoBehaviour
             health -= 250;
         }
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Héroe 2 - Sanador \n" +
+            "Vida: " + health + "\n" +
+            "Rango: " + range + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad de disparo: " + fireRate + "\n" +
+            "Curación: " + curation + "\n" +
+            "Enfriamiento curación: " + curationRate + "\n" + 
+            "Enfriamiento aumento: " + fireRateBoostRate + "\n" + 
+            "Enfriamiento paralizar: " + paralizeRate + "\n"
+            ;
+    }
 }

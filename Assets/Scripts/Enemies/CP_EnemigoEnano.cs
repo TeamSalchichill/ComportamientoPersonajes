@@ -280,4 +280,18 @@ public class CP_EnemigoEnano : MonoBehaviour
             return ReturnValues.Failed;
         }
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Enemigo enano \n" +
+            "Vida: " + health + "\n" +
+            "Rango: " + range + "\n" +
+            "Daño: " + damage + "\n" +
+            "Velocidad: " + speed + "\n" +
+            "Velocidad de ataque: " + hitRate + "\n" +
+            "Tiempo para asustarse : " + scareRate + "\n"
+            ;
+    }
 }

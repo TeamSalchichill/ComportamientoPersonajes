@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class GameManager : MonoBehaviour
     int towerSelected;
     bool canColocate;
     bool canBossFinal = true;
+
+    public GameObject infoPanel;
+    public TextMeshProUGUI info;
 
     [Header("External GameObjects")]
     public GameObject mainTower;
@@ -67,6 +71,11 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetButtonDown("Fire2") || Input.GetButton("Fire2"))
+        {
+            infoPanel.SetActive(false);
+        }
     }
 
     public void InvokeEnemySmall()
@@ -110,5 +119,10 @@ public class GameManager : MonoBehaviour
     {
         canColocate = true;
         towerSelected = id;
+    }
+
+    public void CloseInfo()
+    {
+        infoPanel.SetActive(false);
     }
 }

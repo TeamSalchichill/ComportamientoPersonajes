@@ -456,4 +456,26 @@ public class CP_BossFinal : MonoBehaviour
     {
         print("Estoy en Idle");
     }
+
+    private void OnMouseDown()
+    {
+        gameManager.infoPanel.SetActive(true);
+        gameManager.info.text =
+            "Nombre: Boss final \n" + 
+            "Vida: " + health + "\n" +
+            "Vida máxima: " + healthMax + "\n" +
+            "Tiempo para lanzar habilidad: " + abilityRate + "\n" +
+            "Tiempo para lanzar habilidad (Temporizador): " + abilityRateTimer + "\n" +
+            "Tiempo para lanzar bola de fuego: " + fireBallRate + "\n" +
+            "Tiempo para lanzar bola de fuego (Temporizador): " + fireBallRateTimer + "\n" +
+            "Tiempo para deshabilitar torre: " + disableTowerRate + "\n" +
+            "Tiempo para deshabilitar torre (Temporizador): " + disableTowerRateTimer + "\n" +
+            "Tiempo para invocar moscas: " + invokeFlyRate + "\n" +
+            "Tiempo para invocar moscas (Temporizador): " + invokeFlyRateTimer + "\n" +
+            "Cantidad total de recursos: " + totalResources + "\n" +
+            "Cantidad de recursos actual: " + actualResources + "\n" +
+            "Tiempo para invocar un boss: " + bossRate + "\n" +
+            "Tiempo para invocar un boss (Temporizador): " + bossRateTimer + "\n"
+        ;
+    }
 }
