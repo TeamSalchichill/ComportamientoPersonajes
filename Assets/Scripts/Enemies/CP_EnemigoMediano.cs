@@ -62,12 +62,15 @@ public class CP_EnemigoMediano : MonoBehaviour
         float minDistance = Mathf.Infinity;
         foreach (GameObject tower in gameManager.towers)
         {
-            if (Vector3.Distance(transform.position, tower.transform.position) < rangeDetect && Vector3.Distance(transform.position, tower.transform.position) < minDistance)
+            if (tower.GetComponent<CP_Torres>())
             {
-                minDistance = Vector3.Distance(transform.position, tower.transform.position);
+                if (Vector3.Distance(transform.position, tower.transform.position) < rangeDetect && Vector3.Distance(transform.position, tower.transform.position) < minDistance)
+                {
+                    minDistance = Vector3.Distance(transform.position, tower.transform.position);
 
-                towerInRangeCheck = true;
-                towerInRange = tower;
+                    towerInRangeCheck = true;
+                    towerInRange = tower;
+                }
             }
         }
         enemyInRangeCheck = false;

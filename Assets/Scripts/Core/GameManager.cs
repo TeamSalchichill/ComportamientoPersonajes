@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     }
     public void InvokeEnemyMedium()
     {
-        int randomID = Random.Range(1, spawns.Length);
+        int randomID = Random.Range(2, spawns.Length);
         Vector3 localSpawn = new Vector3(spawns[randomID].transform.position.x, 0, spawns[randomID].transform.position.z);
         Instantiate(enemyMedium, localSpawn, transform.rotation);
         numEnemiesMedium++;
